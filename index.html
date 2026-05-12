@@ -54,8 +54,6 @@
     align-items: flex-end;
   }
 
-  .header-left {}
-
   .header-title {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
@@ -417,15 +415,229 @@
     line-height: 1.2;
   }
 
+  .diet-section {
+    margin: 20px 0 40px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.05);
+  }
+
+  .hero {
+    background: #111;
+    color: #f6f2ea;
+    padding: 32px 24px 28px;
+    position: relative;
+  }
+
+  .hero::after {
+    content: 'EAT';
+    position: absolute;
+    right: 16px;
+    bottom: 8px;
+    font-size: 120px;
+    font-weight: 800;
+    color: rgba(246,242,234,0.08);
+    letter-spacing: -4px;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 6vw, 48px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 em {
+    color: #d95a28;
+    font-style: normal;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    color: #ccc;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+
+  .macro-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .macro-item {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+  }
+
+  .macro-val {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .macro-key {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    color: #bbb;
+  }
+
+  .tab-bar {
+    display: flex;
+    background: #111;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 16px 12px;
+    border: none;
+    background: none;
+    color: #bbb;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab-btn.active {
+    color: #f6f2ea;
+    border-bottom-color: #d95a28;
+  }
+
+  .view { display: none; padding: 20px 24px 26px; background: #fff; }
+  .view.active { display: block; }
+
+  .calc-card {
+    margin-bottom: 18px;
+    background: #f8f4ee;
+    border: 1px solid #e5dfd6;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .calc-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5dfd6;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #7a6e62;
+    font-weight: 700;
+  }
+
+  .calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5dfd6;
+    font-size: 14px;
+  }
+
+  .calc-row:last-child { border-bottom: none; }
+
+  .calc-row.highlight { background: #fff6f2; }
+
+  .calc-label { color: #5a4f44; }
+
+  .calc-val {
+    font-weight: 700;
+    color: #222;
+  }
+
+  .calc-val.red { color: #d95a28; }
+  .calc-val.orange { color: #c17d1c; }
+
+  .macro-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .macro-card {
+    background: #fff;
+    border: 1px solid #e5dfd6;
+    border-radius: 18px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+
+  .mc-num {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .mc-label {
+    font-size: 10px;
+    color: #7a6e62;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  .mc-sub {
+    font-size: 12px;
+    color: #6a6157;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .info-box {
+    margin-bottom: 18px;
+    padding: 16px;
+    border-left: 3px solid #c17d1c;
+    background: #fff7f0;
+    border: 1px solid #e5dfd6;
+    border-radius: 16px;
+  }
+
+  .info-box-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c17d1c;
+    margin-bottom: 8px;
+  }
+
+  .info-box-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #5a4f44;
+  }
+
   .diet-input-group {
     display: grid;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
+    margin: 12px 0 0;
   }
 
   .diet-input-group label {
     font-size: 12px;
-    color: var(--ink);
+    color: #5a4f44;
     display: grid;
     gap: 6px;
   }
@@ -433,36 +645,170 @@
   .diet-input-group input,
   .diet-input-group select {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid #d8d1c7;
+    border-radius: 14px;
     font-size: 14px;
-    background: white;
-    color: var(--ink);
+    background: #fff;
+    color: #2f2b28;
   }
 
-  .diet-meals {
-    display: grid;
+  .day-selector {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .day-selector::-webkit-scrollbar { display: none; }
+
+  .day-pill {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    background: #f6f2ea;
+    border: 1px solid #e5dfd6;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #5a4f44;
+    cursor: pointer;
+  }
+
+  .day-pill.active {
+    background: #111;
+    color: #f6f2ea;
+    border-color: #111;
+  }
+
+  .meal-block {
+    border-bottom: 1px solid #e5dfd6;
+    margin-bottom: 18px;
+  }
+
+  .meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 0;
+  }
+
+  .meal-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #2f2b28;
+  }
+
+  .meal-kcal {
+    font-size: 14px;
+    font-weight: 700;
+    color: #d95a28;
+  }
+
+  .meal-time {
+    font-size: 11px;
+    color: #7a6e62;
+    margin-top: 4px;
+  }
+
+  .food-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1ece6;
   }
 
-  .diet-meal {
-    padding: 14px;
-    border-radius: 16px;
-    background: #faf7f2;
-    border: 1px solid #ece3d7;
-  }
+  .food-item:last-child { border-bottom: none; }
 
-  .diet-meal h4 {
-    margin-bottom: 8px;
+  .food-name {
     font-size: 14px;
-    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.4;
+    color: #2f2b28;
   }
 
-  .diet-meal p {
+  .food-portion {
+    font-size: 11px;
+    color: #7a6e62;
+    margin-top: 4px;
+  }
+
+  .food-macros {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    min-width: 130px;
+  }
+
+  .macro-chip {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 999px;
+  }
+
+  .p-chip { background: #fcedeb; color: #ab2e24; }
+  .c-chip { background: #fff6e7; color: #a36c22; }
+  .f-chip { background: #eff4ef; color: #2f6b47; }
+
+  .day-total {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .dt-item {
+    background: #fff;
+    border: 1px solid #e5dfd6;
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .dt-num {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .dt-label {
+    font-size: 9px;
+    color: #7a6e62;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .tip-section { display: grid; gap: 12px; }
+
+  .tip-item {
+    background: #fff;
+    border: 1px solid #e5dfd6;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .tip-item-header {
+    padding: 14px 16px;
     font-size: 13px;
-    color: #5f5a50;
-    line-height: 1.5;
+    font-weight: 700;
+    color: #2f2b28;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tip-item-body {
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #5a4f44;
   }
 
   @keyframes checkPop {
@@ -522,57 +868,65 @@
     </div>
   </div>
 
-  <div class="diet-panel" id="dietPanel">
-    <div class="diet-title">Diet planner</div>
-    <div class="diet-desc">Personalized fat-loss calorie and macro targets for your current stats.</div>
-
-    <div class="diet-grid">
-      <div class="diet-card">
-        <strong>Profile</strong>
-        <div class="diet-input-group">
-          <label>Age
-            <input type="number" id="dietAge" min="15" max="80" onchange="onDietInputChange('age', this.value)" />
-          </label>
-          <label>Height (cm)
-            <input type="number" id="dietHeight" min="120" max="220" onchange="onDietInputChange('height', this.value)" />
-          </label>
-          <label>Weight (kg)
-            <input type="number" id="dietWeight" min="40" max="200" onchange="onDietInputChange('weight', this.value)" />
-          </label>
-          <label>Activity level
-            <select id="dietActivity" onchange="onDietInputChange('activity', this.value)">
-              <option value="light">Light</option>
-              <option value="moderate">Moderate</option>
-              <option value="heavy">Heavy</option>
-            </select>
-          </label>
-          <label>Goal
-            <select id="dietGoal" onchange="onDietInputChange('goal', this.value)">
-              <option value="fat_loss">Lose fat</option>
-              <option value="maintain">Maintain</option>
-            </select>
-          </label>
-          <label class="diet-source">Meal choices
-            <select id="dietSource" onchange="onDietInputChange('source', this.value)">
-              <option value="local">General favorites</option>
-              <option value="thai">Online Thai recipes</option>
-              <option value="remote">Online general recipes</option>
-            </select>
-          </label>
-        </div>
-      </div>
-      <div class="diet-card">
-        <strong>Daily targets</strong>
-        <div class="diet-value" id="dietCals">— kcal</div>
-        <div class="diet-value" id="dietMacros" style="font-size:14px;font-weight:500; margin-top:8px; color:#57514a"></div>
-      </div>
-      <div class="diet-card">
-        <strong>Notes</strong>
-        <p id="dietNote">Lower calories by about 500 kcal for steady fat loss. Keep protein high to preserve muscle.</p>
+  <div class="diet-section">
+    <div class="hero">
+      <div class="hero-label">Fat Loss + Performance Diet</div>
+      <h1>FUEL<br><em>SMART</em></h1>
+      <p class="hero-sub">Targeted calorie and macro guidance for your current training phase.</p>
+      <div class="macro-row">
+        <div class="macro-item"><div class="macro-val" id="heroCalories">—</div><div class="macro-key">kcal target</div></div>
+        <div class="macro-item"><div class="macro-val" id="heroProtein">—</div><div class="macro-key">protein</div></div>
+        <div class="macro-item"><div class="macro-val" id="heroCarbs">—</div><div class="macro-key">carbs</div></div>
+        <div class="macro-item"><div class="macro-val" id="heroFat">—</div><div class="macro-key">fat</div></div>
       </div>
     </div>
 
-    <div class="diet-meals" id="dietMeals"></div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="calories" onclick="switchDietTab('calories')">📊 Calories</button>
+      <button class="tab-btn" data-tab="meals" onclick="switchDietTab('meals')">🍽️ Meal Plan</button>
+      <button class="tab-btn" data-tab="tips" onclick="switchDietTab('tips')">💡 Rules</button>
+    </div>
+
+    <div class="view active" id="dietCaloriesView">
+      <div class="calc-card">
+        <div class="calc-header">Your Numbers (Mifflin-St Jeor)</div>
+        <div class="calc-row"><span class="calc-label">BMR (estimated)</span><span class="calc-val" id="bmrValue">— kcal</span></div>
+        <div class="calc-row"><span class="calc-label">TDEE (activity adjusted)</span><span class="calc-val orange" id="tdeeValue">— kcal</span></div>
+        <div class="calc-row"><span class="calc-label">Deficit</span><span class="calc-val" id="deficitValue">— kcal</span></div>
+        <div class="calc-row highlight"><span class="calc-label">🎯 Target daily calories</span><span class="calc-val red" id="dietCals">— kcal</span></div>
+      </div>
+
+      <div class="macro-breakdown">
+        <div class="macro-card"><div class="mc-num" id="proteinValue">—</div><div class="mc-label">Protein</div><div class="mc-sub">Preserve muscle while cutting.</div></div>
+        <div class="macro-card"><div class="mc-num" id="carbsValue">—</div><div class="mc-label">Carbs</div><div class="mc-sub">Fuel your run and training.</div></div>
+        <div class="macro-card"><div class="mc-num" id="fatValue">—</div><div class="mc-label">Fat</div><div class="mc-sub">Keep hormones and recovery stable.</div></div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">Daily note</div>
+        <div class="info-box-text" id="dietNote">—</div>
+      </div>
+
+      <div class="calc-card">
+        <div class="calc-header">Profile</div>
+        <div class="diet-input-group">
+          <label>Age <input type="number" id="dietAge" min="15" max="80" onchange="onDietInputChange('age', this.value)" /></label>
+          <label>Height (cm) <input type="number" id="dietHeight" min="120" max="220" onchange="onDietInputChange('height', this.value)" /></label>
+          <label>Weight (kg) <input type="number" id="dietWeight" min="40" max="200" onchange="onDietInputChange('weight', this.value)" /></label>
+          <label>Activity level <select id="dietActivity" onchange="onDietInputChange('activity', this.value)"><option value="light">Light</option><option value="moderate">Moderate</option><option value="heavy">Heavy</option></select></label>
+          <label>Goal <select id="dietGoal" onchange="onDietInputChange('goal', this.value)"><option value="fat_loss">Lose fat</option><option value="maintain">Maintain</option></select></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="dietMealsView">
+      <div class="day-selector" id="dietDaySel"></div>
+      <div id="dietMealContent"></div>
+    </div>
+
+    <div class="view" id="dietTipsView">
+      <div class="tip-section" id="dietTipsContent"></div>
+    </div>
   </div>
 
 </div>
@@ -692,26 +1046,130 @@ const DEFAULT_DIET_STATE = {
   weight: 80,
   activity: 'light',
   goal: 'fat_loss',
-  source: 'local',
 };
 
 let dietState = { ...DEFAULT_DIET_STATE };
-let remoteMeals = { thai: [], remote: [] };
-const FALLBACK_THAI_MEALS = [
-  { title: 'Pad Thai', text: 'Rice noodles with shrimp or chicken, eggs, bean sprouts, and peanuts.' },
-  { title: 'Som Tam', text: 'Green papaya salad with lime, chili, garlic and a touch of fish sauce.' },
-  { title: 'Gaeng Keow Wan', text: 'Green curry with chicken, broccoli, baby corn and jasmine rice.' },
-  { title: 'Gai Pad Med Mamuang', text: 'Stir-fried chicken with cashews and mixed vegetables.' },
-  { title: 'Tom Yum Soup', text: 'Spicy sour shrimp soup with lemongrass, lime and mushrooms.' },
-  { title: 'Pad See Ew', text: 'Wide rice noodles with broccoli, soy sauce, and lean protein.' },
-];
-const FALLBACK_GENERAL_MEALS = [
-  { title: 'Grilled chicken salad', text: 'Lean chicken breast, mixed greens, avocado, and a light dressing.' },
-  { title: 'Oatmeal breakfast bowl', text: 'Oats with berries, nuts, and a scoop of protein powder.' },
-  { title: 'Veggie omelet', text: 'Eggs with spinach, tomatoes, mushrooms and low-fat cheese.' },
-  { title: 'Lentil soup', text: 'Protein-rich lentils with carrots, celery, and herbs.' },
-  { title: 'Stir-fried veggies', text: 'Colorful vegetables with tofu or chicken and a low-sodium sauce.' },
-  { title: 'Fish and quinoa', text: 'Baked fish fillet with quinoa and steamed greens.' },
+let currentDietTab = 'calories';
+let currentDietDay = 'Run Day';
+const DIET_DAY_TYPES = ['Run Day', 'Lift Day', 'Rest Day', 'Long Run Day'];
+const DIET_MEAL_PLANS = {
+  'Run Day': {
+    kcal: 1800,
+    meals: [
+      { name: 'Breakfast', time: '7:00 AM', kcal: 420, foods: [
+        { name: 'Oatmeal', portion: '80g dry', p: 10, c: 54, f: 6 },
+        { name: 'Boiled Eggs', portion: '3 whole', p: 18, c: 0, f: 14 },
+        { name: 'Banana', portion: '1 medium', p: 1, c: 27, f: 0 },
+      ] },
+      { name: 'Pre-run Snack', time: '10:30 AM', kcal: 160, foods: [
+        { name: 'Rice cake / Bread', portion: '2 slices', p: 4, c: 30, f: 1 },
+        { name: 'Honey', portion: '1 tbsp', p: 0, c: 17, f: 0 },
+      ] },
+      { name: 'Post-run Lunch', time: '1:00 PM', kcal: 520, foods: [
+        { name: 'Chicken Breast', portion: '180g', p: 54, c: 0, f: 4 },
+        { name: 'Jasmine Rice', portion: '150g cooked', p: 4, c: 40, f: 0 },
+        { name: 'Stir-fried Vegetables', portion: '1 cup', p: 3, c: 10, f: 3 },
+      ] },
+      { name: 'Afternoon Snack', time: '4:00 PM', kcal: 200, foods: [
+        { name: 'Greek Yogurt', portion: '150g', p: 15, c: 8, f: 3 },
+        { name: 'Mixed Berries', portion: '100g', p: 1, c: 15, f: 0 },
+      ] },
+      { name: 'Dinner', time: '7:00 PM', kcal: 500, foods: [
+        { name: 'Salmon / Tilapia', portion: '180g', p: 42, c: 0, f: 12 },
+        { name: 'Sweet Potato', portion: '150g', p: 3, c: 35, f: 0 },
+        { name: 'Broccoli', portion: '1 cup', p: 4, c: 8, f: 0 },
+      ] },
+    ]
+  },
+  'Lift Day': {
+    kcal: 1800,
+    meals: [
+      { name: 'Breakfast', time: '7:00 AM', kcal: 420, foods: [
+        { name: 'Eggs Scrambled', portion: '4 whole', p: 24, c: 0, f: 18 },
+        { name: 'Whole Grain Toast', portion: '2 slices', p: 8, c: 28, f: 3 },
+        { name: 'Avocado', portion: '½ medium', p: 1, c: 6, f: 11 },
+      ] },
+      { name: 'Pre-lift Snack', time: '11:00 AM', kcal: 200, foods: [
+        { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0 },
+        { name: 'Whey Protein', portion: '1 scoop / 250ml', p: 20, c: 8, f: 2 },
+      ] },
+      { name: 'Post-lift Lunch', time: '1:30 PM', kcal: 550, foods: [
+        { name: 'Ground Beef / Tofu', portion: '200g', p: 46, c: 0, f: 14 },
+        { name: 'Rice / Quinoa', portion: '150g cooked', p: 5, c: 40, f: 2 },
+        { name: 'Mixed Salad', portion: '2 cups', p: 3, c: 8, f: 0 },
+      ] },
+      { name: 'Afternoon Snack', time: '4:30 PM', kcal: 130, foods: [
+        { name: 'Cottage Cheese', portion: '150g', p: 18, c: 4, f: 2 },
+      ] },
+      { name: 'Dinner', time: '7:00 PM', kcal: 500, foods: [
+        { name: 'Chicken Thigh', portion: '200g', p: 46, c: 0, f: 10 },
+        { name: 'Brown Rice', portion: '120g cooked', p: 3, c: 30, f: 1 },
+        { name: 'Stir-fried Veggies + Egg', portion: '1 cup + 1 egg', p: 10, c: 12, f: 6 },
+      ] },
+    ]
+  },
+  'Rest Day': {
+    kcal: 1600,
+    meals: [
+      { name: 'Breakfast', time: '8:00 AM', kcal: 380, foods: [
+        { name: 'Oatmeal', portion: '60g dry', p: 8, c: 40, f: 5 },
+        { name: 'Boiled Eggs', portion: '2 whole', p: 12, c: 0, f: 10 },
+        { name: 'Apple', portion: '1 medium', p: 0, c: 25, f: 0 },
+      ] },
+      { name: 'Lunch', time: '12:30 PM', kcal: 480, foods: [
+        { name: 'Tuna / Chicken Breast', portion: '160g', p: 44, c: 0, f: 3 },
+        { name: 'Rice (smaller portion)', portion: '100g cooked', p: 3, c: 26, f: 0 },
+        { name: 'Cucumber Salad', portion: '1 cup', p: 2, c: 8, f: 1 },
+      ] },
+      { name: 'Snack', time: '3:30 PM', kcal: 140, foods: [
+        { name: 'Greek Yogurt', portion: '150g plain', p: 15, c: 8, f: 3 },
+      ] },
+      { name: 'Dinner', time: '6:30 PM', kcal: 600, foods: [
+        { name: 'Pork Tenderloin / Fish', portion: '200g', p: 44, c: 0, f: 8 },
+        { name: 'Sweet Potato / Pumpkin', portion: '150g', p: 3, c: 30, f: 0 },
+        { name: 'Steamed Broccoli + Spinach', portion: '1.5 cups', p: 6, c: 10, f: 0 },
+      ] },
+    ]
+  },
+  'Long Run Day': {
+    kcal: 2100,
+    note: '+300 kcal carb-up for 15km+ runs',
+    meals: [
+      { name: 'Pre-run Breakfast', time: '6:00 AM', kcal: 450, foods: [
+        { name: 'Oatmeal', portion: '100g dry', p: 12, c: 68, f: 6 },
+        { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0 },
+        { name: 'Honey', portion: '1 tbsp', p: 0, c: 17, f: 0 },
+      ] },
+      { name: 'During Run', time: 'Every 45 min', kcal: 120, foods: [
+        { name: 'Energy Gel or Dates', portion: '1 gel / 3 dates', p: 0, c: 25, f: 0 },
+        { name: 'Water / Electrolyte', portion: '250–500ml', p: 0, c: 0, f: 0 },
+      ] },
+      { name: 'Recovery Meal', time: 'Within 30 min', kcal: 400, foods: [
+        { name: 'Whey Protein + Milk', portion: '1 scoop + 300ml', p: 30, c: 20, f: 5 },
+        { name: 'Banana or Rice cake', portion: '1 piece', p: 1, c: 27, f: 0 },
+      ] },
+      { name: 'Big Lunch', time: '1:00 PM', kcal: 620, foods: [
+        { name: 'Chicken Breast', portion: '200g', p: 60, c: 0, f: 4 },
+        { name: 'Jasmine Rice', portion: '200g cooked', p: 5, c: 54, f: 0 },
+        { name: 'Mixed Veg', portion: '1.5 cups', p: 4, c: 12, f: 4 },
+      ] },
+      { name: 'Dinner', time: '7:00 PM', kcal: 510, foods: [
+        { name: 'Salmon', portion: '180g', p: 42, c: 0, f: 12 },
+        { name: 'Quinoa or Brown Rice', portion: '120g cooked', p: 5, c: 28, f: 2 },
+        { name: 'Vegetables + Olive Oil', portion: '1 cup + 1 tsp', p: 4, c: 10, f: 5 },
+      ] },
+    ]
+  }
+};
+const DIET_TIPS_DATA = [
+  { emoji: '🥩', title: 'Protein First — Always', body: 'Build every meal around protein. Aim for 40–55g per meal to preserve muscle while cutting.' },
+  { emoji: '🍚', title: 'Time Carbs Around Training', body: 'Eat bigger carb meals before and after workouts. Cut carbs on rest days and keep vegetables high.' },
+  { emoji: '💧', title: 'Drink 3–4L Water Daily', body: 'Hydration helps performance, recovery, and appetite control. Start the morning with water.' },
+  { emoji: '🚫', title: 'Cut Sugary Drinks', body: 'Sugary beverages and sweet snacks can add 300+ hidden calories. Swap for water or black coffee.' },
+  { emoji: '⏰', title: 'Train with Fuel', body: 'Eat 1.5–2 hours before runs and lifting. Refuel within 30 minutes after heavy sessions.' },
+  { emoji: '📉', title: 'Small Deficits Work Better', body: 'A 300–500 kcal deficit is sustainable and helps keep training quality high while losing fat.' },
+  { emoji: '🛌', title: 'Sleep Matters', body: '7–9 hours of sleep supports recovery, hormones, and fat loss. Poor sleep makes hunger harder to control.' },
+  { emoji: '🍺', title: 'Alcohol is a Cost', body: 'Alcohol slows fat loss and adds calories. Keep it occasional if you want faster progress.' },
 ];
 
 function loadState() {
@@ -954,6 +1412,18 @@ function updateSummary() {
   document.getElementById('sbDone').textContent = `${done}/${total}`;
 }
 
+function switchDietTab(tab) {
+  currentDietTab = tab;
+  document.querySelectorAll('.diet-section .tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  document.getElementById('dietCaloriesView').classList.toggle('active', tab === 'calories');
+  document.getElementById('dietMealsView').classList.toggle('active', tab === 'meals');
+  document.getElementById('dietTipsView').classList.toggle('active', tab === 'tips');
+  if (tab === 'meals') renderDietMeals();
+  if (tab === 'tips') renderDietTips();
+}
+
 function updateDietPanel() {
   const profileInputs = {
     age: document.getElementById('dietAge'),
@@ -961,41 +1431,109 @@ function updateDietPanel() {
     weight: document.getElementById('dietWeight'),
     activity: document.getElementById('dietActivity'),
     goal: document.getElementById('dietGoal'),
-    source: document.getElementById('dietSource'),
   };
 
   Object.entries(profileInputs).forEach(([key, input]) => {
     if (input) input.value = dietState[key];
   });
 
-  const { target, protein, fat, carbs, tdee } = computeDietTargets();
+  const { target, protein, fat, carbs, tdee, bmr, deficit } = computeDietTargets();
+  document.getElementById('heroCalories').textContent = `${target} kcal`;
+  document.getElementById('heroProtein').textContent = `${protein}g`;
+  document.getElementById('heroCarbs').textContent = `${carbs}g`;
+  document.getElementById('heroFat').textContent = `${fat}g`;
   document.getElementById('dietCals').textContent = `${target} kcal`;
-  document.getElementById('dietMacros').textContent = `${protein}g protein · ${fat}g fat · ${carbs}g carbs`;
+  document.getElementById('bmrValue').textContent = `${bmr} kcal`;
+  document.getElementById('tdeeValue').textContent = `${tdee} kcal`;
+  document.getElementById('deficitValue').textContent = `${deficit} kcal`;
+  document.getElementById('proteinValue').textContent = `${protein}g`;
+  document.getElementById('carbsValue').textContent = `${carbs}g`;
+  document.getElementById('fatValue').textContent = `${fat}g`;
   document.getElementById('dietNote').textContent = dietState.goal === 'fat_loss'
     ? `Goal: steady fat loss with a moderate deficit from your estimated ${tdee} kcal maintenance.`
     : `Goal: maintain weight and stay consistent with balanced energy intake.`;
 
-  const mealsEl = document.getElementById('dietMeals');
-  if (dietState.source === 'thai' || dietState.source === 'remote') {
-    mealsEl.innerHTML = `<div class="diet-meal"><h4>Loading online meals…</h4><p>Checking the internet for recipes.</p></div>`;
-    loadRemoteMeals(dietState.source).then(() => {
-      if (dietState.source === 'thai') {
-        mealsEl.innerHTML = remoteMeals.thai.length ? generateRemoteMealCards('thai') : `<div class="diet-meal"><h4>No Thai meals found</h4><p>Try again later or switch back to local options.</p></div>`;
-      } else {
-        mealsEl.innerHTML = remoteMeals.remote.length ? generateRemoteMealCards('remote') : `<div class="diet-meal"><h4>No online meals found</h4><p>Try again later or switch back to local options.</p></div>`;
-      }
-    }).catch(err => {
-      if (dietState.source === 'thai') {
-        mealsEl.innerHTML = generateFallbackThaiCards();
-      } else {
-        mealsEl.innerHTML = generateFallbackGeneralCards();
-      }
-      mealsEl.insertAdjacentHTML('beforeend', `<div class="diet-meal"><h4>Offline fallback</h4><p>Internet recipes could not be loaded. Try opening the page from a local server or switch to local favorites.</p></div>`);
-      console.warn('Recipe fetch failed', err);
-    });
-  } else {
-    mealsEl.innerHTML = generateMealCards(target);
+  if (currentDietTab === 'meals') renderDietMeals();
+  if (currentDietTab === 'tips') renderDietTips();
+}
+
+function renderDietMeals() {
+  const sel = document.getElementById('dietDaySel');
+  sel.innerHTML = '';
+  DIET_DAY_TYPES.forEach(day => {
+    const btn = document.createElement('button');
+    btn.className = 'day-pill' + (day === currentDietDay ? ' active' : '');
+    btn.textContent = day;
+    btn.onclick = () => { currentDietDay = day; renderDietMeals(); };
+    sel.appendChild(btn);
+  });
+
+  const plan = DIET_MEAL_PLANS[currentDietDay];
+  const content = document.getElementById('dietMealContent');
+  content.innerHTML = '';
+
+  if (plan.note) {
+    const note = document.createElement('div');
+    note.style.cssText = 'margin-bottom:14px;padding:12px 14px;background:#fff6f0;border-left:3px solid #d95a28;font-size:12px;color:#7a5a45;';
+    note.textContent = `⚡ ${plan.note}`;
+    content.appendChild(note);
   }
+
+  plan.meals.forEach(meal => {
+    const block = document.createElement('div');
+    block.className = 'meal-block';
+    block.innerHTML = `
+      <div class="meal-header">
+        <div>
+          <div class="meal-title">${meal.name}</div>
+          <div class="meal-time">${meal.time}</div>
+        </div>
+        <div class="meal-kcal">${meal.kcal} kcal</div>
+      </div>
+      ${meal.foods.map(f => `
+        <div class="food-item">
+          <div>
+            <div class="food-name">${f.name}</div>
+            <div class="food-portion">${f.portion}</div>
+          </div>
+          <div class="food-macros">
+            ${f.p > 0 ? `<span class="macro-chip p-chip">${f.p}g P</span>` : ''}
+            ${f.c > 0 ? `<span class="macro-chip c-chip">${f.c}g C</span>` : ''}
+            ${f.f > 0 ? `<span class="macro-chip f-chip">${f.f}g F</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    `;
+    content.appendChild(block);
+  });
+
+  const totalP = plan.meals.flatMap(m => m.foods).reduce((sum, f) => sum + (f.p || 0), 0);
+  const totalC = plan.meals.flatMap(m => m.foods).reduce((sum, f) => sum + (f.c || 0), 0);
+  const totalF = plan.meals.flatMap(m => m.foods).reduce((sum, f) => sum + (f.f || 0), 0);
+
+  const tot = document.createElement('div');
+  tot.className = 'day-total';
+  tot.innerHTML = `
+    <div class="dt-item"><div class="dt-num" style="color:#d95a28">${plan.kcal}</div><div class="dt-label">kcal</div></div>
+    <div class="dt-item"><div class="dt-num" style="color:#3a7bd5">${totalP}g</div><div class="dt-label">protein</div></div>
+    <div class="dt-item"><div class="dt-num" style="color:#a36c22">${totalC}g</div><div class="dt-label">carbs</div></div>
+    <div class="dt-item"><div class="dt-num" style="color:#2f6b47">${totalF}g</div><div class="dt-label">fat</div></div>
+  `;
+  content.appendChild(tot);
+}
+
+function renderDietTips() {
+  const cont = document.getElementById('dietTipsContent');
+  cont.innerHTML = '';
+  DIET_TIPS_DATA.forEach(tip => {
+    const item = document.createElement('div');
+    item.className = 'tip-item';
+    item.innerHTML = `
+      <div class="tip-item-header">${tip.emoji} ${tip.title}</div>
+      <div class="tip-item-body">${tip.body}</div>
+    `;
+    cont.appendChild(item);
+  });
 }
 
 function computeDietTargets() {
@@ -1013,75 +1551,8 @@ function computeDietTargets() {
   const protein = Math.round(weight * 2.0);
   const fat = Math.round((target * 0.25) / 9);
   const carbs = Math.max(0, Math.round((target - protein * 4 - fat * 9) / 4));
-  return { bmr, tdee, target, protein, fat, carbs };
-}
-
-function generateMealCards() {
-  const meals = [
-    { title: 'Breakfast', text: 'Greek yogurt with berries, a handful of nuts, and oats.' },
-    { title: 'Lunch', text: 'Grilled chicken salad with mixed greens, quinoa, avocado and olive oil.' },
-    { title: 'Snack', text: 'Cottage cheese or hummus with fresh veggies.' },
-    { title: 'Dinner', text: 'Salmon or tofu bowl with roasted vegetables and brown rice.' },
-  ];
-
-  return meals.map(meal => `
-    <div class="diet-meal">
-      <h4>${meal.title}</h4>
-      <p>${meal.text}</p>
-    </div>
-  `).join('');
-}
-
-async function loadRemoteMeals(type) {
-  if (remoteMeals[type] && remoteMeals[type].length > 0) return;
-
-  let url;
-  if (type === 'thai') {
-    url = 'https://www.themealdb.com/api/json/v1/1/filter.php?a=Thai';
-  } else {
-    url = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-  }
-
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Network response was not ok');
-  const data = await response.json();
-  if (!data.meals || !Array.isArray(data.meals)) {
-    throw new Error('No meals returned');
-  }
-
-  remoteMeals[type] = data.meals.slice(0, 6).map(meal => ({
-    title: meal.strMeal,
-    text: meal.strInstructions ? meal.strInstructions.slice(0, 120) + '...' : 'Try this meal with lean protein, veggies, and balanced carbs.',
-    url: meal.strSource || `https://www.themealdb.com/meal/${meal.idMeal}`,
-  }));
-}
-
-function generateRemoteMealCards(type) {
-  return remoteMeals[type].map(meal => `
-    <div class="diet-meal">
-      <h4>${meal.title}</h4>
-      <p>${meal.text}</p>
-      <p style="margin-top:8px; font-size:12px; color:#7a7063;"><a href="${meal.url}" target="_blank" rel="noopener noreferrer">Open recipe</a></p>
-    </div>
-  `).join('');
-}
-
-function generateFallbackThaiCards() {
-  return FALLBACK_THAI_MEALS.map(meal => `
-    <div class="diet-meal">
-      <h4>${meal.title}</h4>
-      <p>${meal.text}</p>
-    </div>
-  `).join('');
-}
-
-function generateFallbackGeneralCards() {
-  return FALLBACK_GENERAL_MEALS.map(meal => `
-    <div class="diet-meal">
-      <h4>${meal.title}</h4>
-      <p>${meal.text}</p>
-    </div>
-  `).join('');
+  const deficit = dietState.goal === 'fat_loss' ? Math.max(0, tdee - target) : 0;
+  return { bmr, tdee, target, protein, fat, carbs, deficit };
 }
 
 function onDietInputChange(key, value) {

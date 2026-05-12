@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diet Plan — Fat Loss + Performance</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f3ee;
+    --white: #fff;
+    --black: #111;
+    --border: #e0dbd0;
+    --muted: #888;
+    --protein: #c8341a;
+    --carb: #d4850a;
+    --fat: #2e7d4f;
+    --surface: #f0ece4;
+    --card: #fff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--black);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--black);
+    color: #f0ece4;
+    padding: 44px 20px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: 'EAT';
+    position: absolute;
+    right: -12px; bottom: -20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 140px; font-weight: 800;
+    color: #ffffff05; line-height: 1;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: #666;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(40px, 10vw, 64px);
+    font-weight: 800; line-height: 0.92;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .hero h1 em { color: var(--protein); font-style: normal; }
+
+  .hero-sub { font-size: 13px; color: #888; line-height: 1.5; max-width: 320px; }
+
+  .macro-row {
+    display: flex; margin-top: 24px;
+    border: 1px solid #222;
+  }
+
+  .macro-item {
+    flex: 1; padding: 12px 14px;
+    border-right: 1px solid #222;
+  }
+  .macro-item:last-child { border-right: none; }
+
+  .macro-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px; font-weight: 700; line-height: 1;
+  }
+
+  .macro-key {
+    font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #555;
+    margin-top: 3px;
+  }
+
+  /* TABS */
+  .tab-bar {
+    display: flex; background: var(--black);
+    border-bottom: 1px solid #222;
+    position: sticky; top: 0; z-index: 20;
+  }
+
+  .tab-btn {
+    flex: 1; padding: 13px 6px;
+    background: none; border: none;
+    color: #555;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .tab-btn.active { color: #f0ece4; border-bottom-color: var(--protein); }
+
+  /* SECTIONS */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeUp 0.15s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- CALORIES SECTION ---- */
+  .calc-card {
+    margin: 16px; background: var(--card);
+    border: 1px solid var(--border);
+  }
+
+  .calc-header {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  .calc-row {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .calc-row:last-child { border-bottom: none; }
+  .calc-row.highlight { background: #fff8f6; }
+
+  .calc-label { color: #444; }
+  .calc-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 700;
+  }
+
+  .calc-val.red { color: var(--protein); }
+  .calc-val.orange { color: var(--carb); }
+
+  .macro-breakdown {
+    margin: 0 16px 16px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .macro-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 14px 12px; text-align: center;
+  }
+
+  .mc-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 700; line-height: 1;
+  }
+
+  .mc-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 3px; }
+  .mc-sub { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+
+  .info-box {
+    margin: 0 16px 16px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--carb);
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-box-title {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--carb); margin-bottom: 6px;
+  }
+
+  .info-box-text { font-size: 13px; line-height: 1.6; color: #555; }
+
+  /* ---- MEAL PLAN ---- */
+  .day-selector {
+    display: flex; overflow-x: auto;
+    padding: 12px 16px; gap: 8px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+
+  .day-selector::-webkit-scrollbar { display: none; }
+
+  .day-pill {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; color: var(--muted);
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+
+  .day-pill.active {
+    background: var(--black);
+    border-color: var(--black);
+    color: #f0ece4;
+  }
+
+  .meal-block {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .meal-header {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px 8px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .meal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .meal-kcal {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: var(--protein);
+  }
+
+  .meal-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .food-item {
+    display: flex; justify-content: space-between;
+    align-items: start; gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f0ece4;
+  }
+
+  .food-item:last-child { border-bottom: none; }
+  .food-item:hover { background: #faf8f5; }
+
+  .food-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .food-portion { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .food-macros {
+    display: flex; gap: 8px;
+    flex-shrink: 0; align-items: center;
+  }
+
+  .macro-chip {
+    font-size: 10px; font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  .p-chip { background: #fef2f0; color: var(--protein); }
+  .c-chip { background: #fef8ed; color: var(--carb); }
+  .f-chip { background: #f0f7f3; color: var(--fat); }
+
+  .day-total {
+    margin: 12px 16px;
+    display: flex; gap: 8px;
+  }
+
+  .dt-item {
+    flex: 1; background: var(--card);
+    border: 1px solid var(--border);
+    padding: 10px; text-align: center;
+  }
+
+  .dt-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px; font-weight: 700; line-height: 1;
+  }
+
+  .dt-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+
+  /* ---- TIPS ---- */
+  .tip-section { padding: 16px; }
+
+  .tip-item {
+    background: var(--card); border: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+
+  .tip-item-header {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    display: flex; gap: 10px; align-items: center;
+  }
+
+  .tip-item-body {
+    padding: 10px 14px;
+    font-size: 13px; line-height: 1.6; color: #555;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Fat Loss + Performance Diet</div>
+  <h1>FUEL<br><em>SMART</em></h1>
+  <p class="hero-sub">170cm / 80kg → target 74–76kg. Eat enough to train hard, cut enough to lose fat.</p>
+  <div class="macro-row">
+    <div class="macro-item"><div class="macro-val" style="color:var(--protein)">1,800</div><div class="macro-key">kcal/day</div></div>
+    <div class="macro-item"><div class="macro-val" style="color:#3a7bd5">165g</div><div class="macro-key">protein</div></div>
+    <div class="macro-item"><div class="macro-val" style="color:var(--carb)">180g</div><div class="macro-key">carbs</div></div>
+    <div class="macro-item"><div class="macro-val" style="color:var(--fat)">55g</div><div class="macro-key">fat</div></div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('calories')">📊 Calories</button>
+  <button class="tab-btn" onclick="switchTab('meals')">🍽️ Meal Plan</button>
+  <button class="tab-btn" onclick="switchTab('tips')">💡 Rules</button>
+</div>
+
+<!-- CALORIES VIEW -->
+<div class="view active" id="caloriesView">
+
+  <div class="calc-card">
+    <div class="calc-header">Your Numbers (Mifflin-St Jeor)</div>
+    <div class="calc-row">
+      <span class="calc-label">BMR (base metabolic rate)</span>
+      <span class="calc-val">1,814 kcal</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">TDEE (with training)</span>
+      <span class="calc-val orange">2,350 kcal</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Deficit (−500 kcal/day)</span>
+      <span class="calc-val">−500 kcal</span>
+    </div>
+    <div class="calc-row highlight">
+      <span class="calc-label" style="font-weight:700">🎯 Target daily calories</span>
+      <span class="calc-val red">1,800 kcal</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label" style="font-size:12px;color:var(--muted)">Expected fat loss rate</span>
+      <span class="calc-val" style="font-size:16px;color:var(--fat)">~0.5 kg/week</span>
+    </div>
+  </div>
+
+  <div class="macro-breakdown">
+    <div class="macro-card">
+      <div class="mc-num" style="color:var(--protein)">165g</div>
+      <div class="mc-label">Protein</div>
+      <div class="mc-sub">2g per kg body weight. Preserve muscle while cutting.</div>
+    </div>
+    <div class="macro-card">
+      <div class="mc-num" style="color:var(--carb)">180g</div>
+      <div class="mc-label">Carbs</div>
+      <div class="mc-sub">Fuel for runs. Eat more on long run days.</div>
+    </div>
+    <div class="macro-card">
+      <div class="mc-num" style="color:var(--fat)">55g</div>
+      <div class="mc-label">Fat</div>
+      <div class="mc-label" style="margin-top:6px">Hormones + joint health</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-box-title">⚠️ On Long Run Days (Sat)</div>
+    <div class="info-box-text">Add 200–300 kcal from carbs on long run days (15km+). Don't cut calories when your body needs fuel — it will eat your muscle instead of fat.</div>
+  </div>
+
+  <div class="info-box" style="border-left-color:var(--protein)">
+    <div class="info-box-title" style="color:var(--protein)">🥩 Protein is non-negotiable</div>
+    <div class="info-box-text">165g protein daily. With a calorie deficit + heavy training, this is what keeps your muscle while burning the fat. Hit this number every single day.</div>
+  </div>
+
+</div>
+
+<!-- MEAL PLAN VIEW -->
+<div class="view" id="mealsView">
+  <div class="day-selector" id="daySel"></div>
+  <div id="mealContent"></div>
+</div>
+
+<!-- TIPS VIEW -->
+<div class="view" id="tipsView">
+  <div class="tip-section" id="tipsContent"></div>
+</div>
+
+<div style="height:32px"></div>
+
+<script>
+
+const DAY_TYPES = ['Run Day', 'Lift Day', 'Rest Day', 'Long Run Day'];
+
+// 4 template days covering all scenarios
+const MEAL_PLANS = {
+  'Run Day': {
+    kcal: 1800,
+    meals: [
+      {
+        name: 'Breakfast', time: '7:00 AM', kcal: 420,
+        foods: [
+          { name: 'Oatmeal', portion: '80g dry', p: 10, c: 54, f: 6 },
+          { name: 'Boiled Eggs', portion: '3 whole', p: 18, c: 0, f: 14 },
+          { name: 'Banana', portion: '1 medium', p: 1, c: 27, f: 0 },
+        ]
+      },
+      {
+        name: 'Pre-run Snack', time: '10:30 AM (before run)', kcal: 160,
+        foods: [
+          { name: 'Rice cake / Bread', portion: '2 slices', p: 4, c: 30, f: 1 },
+          { name: 'Honey', portion: '1 tbsp', p: 0, c: 17, f: 0 },
+        ]
+      },
+      {
+        name: 'Post-run Lunch', time: '1:00 PM', kcal: 520,
+        foods: [
+          { name: 'Chicken Breast', portion: '180g', p: 54, c: 0, f: 4 },
+          { name: 'Jasmine Rice', portion: '150g cooked', p: 4, c: 40, f: 0 },
+          { name: 'Stir-fried Vegetables', portion: '1 cup', p: 3, c: 10, f: 3 },
+        ]
+      },
+      {
+        name: 'Afternoon Snack', time: '4:00 PM', kcal: 200,
+        foods: [
+          { name: 'Greek Yogurt', portion: '150g', p: 15, c: 8, f: 3 },
+          { name: 'Mixed Berries / Fruit', portion: '100g', p: 1, c: 15, f: 0 },
+        ]
+      },
+      {
+        name: 'Dinner', time: '7:00 PM', kcal: 500,
+        foods: [
+          { name: 'Salmon / Tilapia', portion: '180g', p: 42, c: 0, f: 12 },
+          { name: 'Sweet Potato', portion: '150g', p: 3, c: 35, f: 0 },
+          { name: 'Broccoli / Greens', portion: '1 cup', p: 4, c: 8, f: 0 },
+        ]
+      },
+    ]
+  },
+  'Lift Day': {
+    kcal: 1800,
+    meals: [
+      {
+        name: 'Breakfast', time: '7:00 AM', kcal: 420,
+        foods: [
+          { name: 'Eggs Scrambled', portion: '4 whole', p: 24, c: 0, f: 18 },
+          { name: 'Whole Grain Toast', portion: '2 slices', p: 8, c: 28, f: 3 },
+          { name: 'Avocado', portion: '½ medium', p: 1, c: 6, f: 11 },
+        ]
+      },
+      {
+        name: 'Pre-lift Snack', time: '11:00 AM', kcal: 200,
+        foods: [
+          { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0 },
+          { name: 'Whey Protein / Milk', portion: '1 scoop / 250ml', p: 20, c: 8, f: 2 },
+        ]
+      },
+      {
+        name: 'Post-lift Lunch', time: '1:30 PM', kcal: 550,
+        foods: [
+          { name: 'Ground Beef (lean) / Tofu', portion: '200g', p: 46, c: 0, f: 14 },
+          { name: 'Rice / Quinoa', portion: '150g cooked', p: 5, c: 40, f: 2 },
+          { name: 'Mixed Salad', portion: '2 cups', p: 3, c: 8, f: 0 },
+        ]
+      },
+      {
+        name: 'Afternoon Snack', time: '4:30 PM', kcal: 130,
+        foods: [
+          { name: 'Cottage Cheese / Silken Tofu', portion: '150g', p: 18, c: 4, f: 2 },
+        ]
+      },
+      {
+        name: 'Dinner', time: '7:00 PM', kcal: 500,
+        foods: [
+          { name: 'Chicken Thigh (skinless)', portion: '200g', p: 46, c: 0, f: 10 },
+          { name: 'Brown Rice', portion: '120g cooked', p: 3, c: 30, f: 1 },
+          { name: 'Stir-fried Veggies + Egg', portion: '1 cup + 1 egg', p: 10, c: 12, f: 6 },
+        ]
+      },
+    ]
+  },
+  'Rest Day': {
+    kcal: 1600,
+    meals: [
+      {
+        name: 'Breakfast', time: '8:00 AM', kcal: 380,
+        foods: [
+          { name: 'Oatmeal', portion: '60g dry', p: 8, c: 40, f: 5 },
+          { name: 'Boiled Eggs', portion: '2 whole', p: 12, c: 0, f: 10 },
+          { name: 'Apple', portion: '1 medium', p: 0, c: 25, f: 0 },
+        ]
+      },
+      {
+        name: 'Lunch', time: '12:30 PM', kcal: 480,
+        foods: [
+          { name: 'Tuna / Chicken Breast', portion: '160g', p: 44, c: 0, f: 3 },
+          { name: 'Rice (smaller portion)', portion: '100g cooked', p: 3, c: 26, f: 0 },
+          { name: 'Cucumber + Tomato Salad', portion: '1 cup', p: 2, c: 8, f: 1 },
+        ]
+      },
+      {
+        name: 'Snack', time: '3:30 PM', kcal: 140,
+        foods: [
+          { name: 'Greek Yogurt', portion: '150g plain', p: 15, c: 8, f: 3 },
+        ]
+      },
+      {
+        name: 'Dinner', time: '6:30 PM', kcal: 600,
+        foods: [
+          { name: 'Pork Tenderloin / Fish', portion: '200g', p: 44, c: 0, f: 8 },
+          { name: 'Sweet Potato / Pumpkin', portion: '150g', p: 3, c: 30, f: 0 },
+          { name: 'Steamed Broccoli + Spinach', portion: '1.5 cups', p: 6, c: 10, f: 0 },
+        ]
+      },
+    ]
+  },
+  'Long Run Day': {
+    kcal: 2100,
+    note: '+300 kcal carb-up for 15km+ runs',
+    meals: [
+      {
+        name: '🍌 Pre-run Breakfast', time: '6:00 AM (2hr before run)', kcal: 450,
+        foods: [
+          { name: 'Oatmeal', portion: '100g dry', p: 12, c: 68, f: 6 },
+          { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0 },
+          { name: 'Honey', portion: '1 tbsp', p: 0, c: 17, f: 0 },
+        ]
+      },
+      {
+        name: '🏃 During Run (15km+)', time: 'Every 45 min of running', kcal: 120,
+        foods: [
+          { name: 'Energy Gel or Dates', portion: '1 gel / 3 dates', p: 0, c: 25, f: 0 },
+          { name: 'Water / Electrolyte', portion: '250–500ml', p: 0, c: 0, f: 0 },
+        ]
+      },
+      {
+        name: '⚡ Recovery Meal (critical!)', time: 'Within 30 min after run', kcal: 400,
+        foods: [
+          { name: 'Whey Protein + Milk', portion: '1 scoop + 300ml', p: 30, c: 20, f: 5 },
+          { name: 'Banana or Rice cake', portion: '1 piece', p: 1, c: 27, f: 0 },
+        ]
+      },
+      {
+        name: 'Big Lunch', time: '1:00 PM', kcal: 620,
+        foods: [
+          { name: 'Chicken Breast', portion: '200g', p: 60, c: 0, f: 4 },
+          { name: 'Jasmine Rice', portion: '200g cooked', p: 5, c: 54, f: 0 },
+          { name: 'Stir-fried Mixed Veg', portion: '1.5 cups', p: 4, c: 12, f: 4 },
+        ]
+      },
+      {
+        name: 'Dinner', time: '7:00 PM', kcal: 510,
+        foods: [
+          { name: 'Salmon', portion: '180g', p: 42, c: 0, f: 12 },
+          { name: 'Quinoa or Brown Rice', portion: '120g cooked', p: 5, c: 28, f: 2 },
+          { name: 'Vegetables + Olive Oil', portion: '1 cup + 1 tsp', p: 4, c: 10, f: 5 },
+        ]
+      },
+    ]
+  }
+};
+
+const TIPS_DATA = [
+  { emoji: '🥩', title: 'Protein First — Always', body: 'Build every meal around protein. Chicken, fish, eggs, tofu, beef, pork. Aim for 40–55g protein per meal across 4 meals. This is the #1 rule while cutting — without enough protein your body burns muscle not fat.' },
+  { emoji: '🍚', title: 'Time Your Carbs Around Training', body: 'Eat your biggest carb meals before and after workouts. Breakfast (before morning training), post-workout lunch. At rest days, cut rice/carbs by 30–40% and fill with vegetables instead.' },
+  { emoji: '💧', title: 'Drink 3–4 Liters of Water Daily', body: 'Especially on run days. Dehydration kills performance and makes you feel hungrier. Start every morning with 500ml water before anything else.' },
+  { emoji: '🚫', title: 'What to Cut (Big Wins)', body: 'Sugary drinks, bubble tea, sweet coffee — can be 300–500 kcal invisible. White bread + fried food as daily staples. Late-night eating after 9pm. These 3 changes alone can create most of your deficit without counting calories.' },
+  { emoji: '⏰', title: 'Meal Timing for Training Days', body: 'Eat 1.5–2 hours before running or lifting. Never train fasted on lifting days. After training, eat within 30–45 minutes. This window is critical for muscle recovery and fat loss at the same time.' },
+  { emoji: '📉', title: 'Fat Loss Takes 8–12 Weeks to Show', body: 'At 0.5kg/week, expect to lose 5–6kg over 12 weeks. The scale may not move week 1–2 as body composition shifts. Trust the process. If weight stalls for 3+ weeks, drop 100–150 kcal from carbs.' },
+  { emoji: '🛌', title: 'Sleep is Part of the Diet', body: 'Under 7 hours of sleep increases cortisol, which breaks down muscle and stores fat — the opposite of what you want. Sleep is when your muscles repair from lifting and running. 7–9 hours every night.' },
+  { emoji: '🍺', title: 'Alcohol', body: 'Alcohol stops fat burning for 24–48 hours after drinking. 1–2 drinks occasionally is fine. Regular drinking (3–4x/week) will significantly slow your fat loss. Your call — just know the cost.' },
+];
+
+let currentTab = 'calories';
+let currentDayType = 'Run Day';
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    const tabs = ['calories', 'meals', 'tips'];
+    b.classList.toggle('active', tabs[i] === tab);
+  });
+  document.getElementById('caloriesView').classList.toggle('active', tab === 'calories');
+  document.getElementById('mealsView').classList.toggle('active', tab === 'meals');
+  document.getElementById('tipsView').classList.toggle('active', tab === 'tips');
+
+  if (tab === 'meals') renderMeals();
+  if (tab === 'tips') renderTips();
+}
+
+function renderMeals() {
+  // Day selector
+  const sel = document.getElementById('daySel');
+  sel.innerHTML = '';
+  DAY_TYPES.forEach(dt => {
+    const btn = document.createElement('button');
+    btn.className = 'day-pill' + (dt === currentDayType ? ' active' : '');
+    btn.textContent = dt;
+    btn.onclick = () => { currentDayType = dt; renderMeals(); };
+    sel.appendChild(btn);
+  });
+
+  const plan = MEAL_PLANS[currentDayType];
+  const content = document.getElementById('mealContent');
+  content.innerHTML = '';
+
+  if (plan.note) {
+    const note = document.createElement('div');
+    note.style.cssText = 'margin:12px 16px;padding:10px 14px;background:#fff8ed;border-left:3px solid #d4850a;font-size:12px;color:#7a5000;';
+    note.textContent = '⚡ ' + plan.note;
+    content.appendChild(note);
+  }
+
+  plan.meals.forEach(meal => {
+    const block = document.createElement('div');
+    block.className = 'meal-block';
+    block.innerHTML = `
+      <div class="meal-header">
+        <div>
+          <div class="meal-title">${meal.name}</div>
+          <div class="meal-time">${meal.time}</div>
+        </div>
+        <div class="meal-kcal">${meal.kcal} kcal</div>
+      </div>
+      ${meal.foods.map(f => `
+        <div class="food-item">
+          <div>
+            <div class="food-name">${f.name}</div>
+            <div class="food-portion">${f.portion}</div>
+          </div>
+          <div class="food-macros">
+            ${f.p > 0 ? `<span class="macro-chip p-chip">${f.p}g P</span>` : ''}
+            ${f.c > 0 ? `<span class="macro-chip c-chip">${f.c}g C</span>` : ''}
+            ${f.f > 0 ? `<span class="macro-chip f-chip">${f.f}g F</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    `;
+    content.appendChild(block);
+  });
+
+  // Day total
+  const totalP = plan.meals.flatMap(m => m.foods).reduce((s, f) => s + f.p, 0);
+  const totalC = plan.meals.flatMap(m => m.foods).reduce((s, f) => s + f.c, 0);
+  const totalF = plan.meals.flatMap(m => m.foods).reduce((s, f) => s + f.f, 0);
+
+  const tot = document.createElement('div');
+  tot.className = 'day-total';
+  tot.innerHTML = `
+    <div class="dt-item"><div class="dt-num" style="color:var(--protein)">${plan.kcal}</div><div class="dt-label">kcal</div></div>
+    <div class="dt-item"><div class="dt-num" style="color:#3a7bd5">${totalP}g</div><div class="dt-label">protein</div></div>
+    <div class="dt-item"><div class="dt-num" style="color:var(--carb)">${totalC}g</div><div class="dt-label">carbs</div></div>
+    <div class="dt-item"><div class="dt-num" style="color:var(--fat)">${totalF}g</div><div class="dt-label">fat</div></div>
+  `;
+  content.appendChild(tot);
+}
+
+function renderTips() {
+  const cont = document.getElementById('tipsContent');
+  cont.innerHTML = '';
+  TIPS_DATA.forEach(tip => {
+    const el = document.createElement('div');
+    el.className = 'tip-item';
+    el.innerHTML = `
+      <div class="tip-item-header">${tip.emoji} ${tip.title}</div>
+      <div class="tip-item-body">${tip.body}</div>
+    `;
+    cont.appendChild(el);
+  });
+}
+</script>
+</body>
+</html>
