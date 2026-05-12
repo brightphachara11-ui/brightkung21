@@ -555,7 +555,8 @@
           <label class="diet-source">Meal choices
             <select id="dietSource" onchange="onDietInputChange('source', this.value)">
               <option value="local">General favorites</option>
-              <option value="thai">Thai-style alternatives</option>
+              <option value="thai">Online Thai recipes</option>
+              <option value="remote">Online general recipes</option>
             </select>
           </label>
         </div>
@@ -695,7 +696,23 @@ const DEFAULT_DIET_STATE = {
 };
 
 let dietState = { ...DEFAULT_DIET_STATE };
-let thaiMeals = [];
+let remoteMeals = { thai: [], remote: [] };
+const FALLBACK_THAI_MEALS = [
+  { title: 'Pad Thai', text: 'Rice noodles with shrimp or chicken, eggs, bean sprouts, and peanuts.' },
+  { title: 'Som Tam', text: 'Green papaya salad with lime, chili, garlic and a touch of fish sauce.' },
+  { title: 'Gaeng Keow Wan', text: 'Green curry with chicken, broccoli, baby corn and jasmine rice.' },
+  { title: 'Gai Pad Med Mamuang', text: 'Stir-fried chicken with cashews and mixed vegetables.' },
+  { title: 'Tom Yum Soup', text: 'Spicy sour shrimp soup with lemongrass, lime and mushrooms.' },
+  { title: 'Pad See Ew', text: 'Wide rice noodles with broccoli, soy sauce, and lean protein.' },
+];
+const FALLBACK_GENERAL_MEALS = [
+  { title: 'Grilled chicken salad', text: 'Lean chicken breast, mixed greens, avocado, and a light dressing.' },
+  { title: 'Oatmeal breakfast bowl', text: 'Oats with berries, nuts, and a scoop of protein powder.' },
+  { title: 'Veggie omelet', text: 'Eggs with spinach, tomatoes, mushrooms and low-fat cheese.' },
+  { title: 'Lentil soup', text: 'Protein-rich lentils with carrots, celery, and herbs.' },
+  { title: 'Stir-fried veggies', text: 'Colorful vegetables with tofu or chicken and a low-sodium sauce.' },
+  { title: 'Fish and quinoa', text: 'Baked fish fillet with quinoa and steamed greens.' },
+];
 
 function loadState() {
   try {
@@ -959,14 +976,22 @@ function updateDietPanel() {
     : `Goal: maintain weight and stay consistent with balanced energy intake.`;
 
   const mealsEl = document.getElementById('dietMeals');
-  if (dietState.source === 'thai') {
-    mealsEl.innerHTML = `<div class="diet-meal"><h4>Loading Thai options…</h4><p>Fetching recipes from the internet.</p></div>`;
-    loadThaiMeals().then(() => {
+  if (dietState.source === 'thai' || dietState.source === 'remote') {
+    mealsEl.innerHTML = `<div class="diet-meal"><h4>Loading online meals…</h4><p>Checking the internet for recipes.</p></div>`;
+    loadRemoteMeals(dietState.source).then(() => {
       if (dietState.source === 'thai') {
-        mealsEl.innerHTML = thaiMeals.length ? generateThaiMealCards() : `<div class="diet-meal"><h4>No Thai meals found</h4><p>Try again later or switch back to general meals.</p></div>`;
+        mealsEl.innerHTML = remoteMeals.thai.length ? generateRemoteMealCards('thai') : `<div class="diet-meal"><h4>No Thai meals found</h4><p>Try again later or switch back to local options.</p></div>`;
+      } else {
+        mealsEl.innerHTML = remoteMeals.remote.length ? generateRemoteMealCards('remote') : `<div class="diet-meal"><h4>No online meals found</h4><p>Try again later or switch back to local options.</p></div>`;
       }
     }).catch(err => {
-      mealsEl.innerHTML = `<div class="diet-meal"><h4>Unable to load Thai meals</h4><p>${err.message}</p></div>`;
+      if (dietState.source === 'thai') {
+        mealsEl.innerHTML = generateFallbackThaiCards();
+      } else {
+        mealsEl.innerHTML = generateFallbackGeneralCards();
+      }
+      mealsEl.insertAdjacentHTML('beforeend', `<div class="diet-meal"><h4>Offline fallback</h4><p>Internet recipes could not be loaded. Try opening the page from a local server or switch to local favorites.</p></div>`);
+      console.warn('Recipe fetch failed', err);
     });
   } else {
     mealsEl.innerHTML = generateMealCards(target);
@@ -1007,23 +1032,51 @@ function generateMealCards() {
   `).join('');
 }
 
-async function loadThaiMeals() {
-  if (thaiMeals.length > 0) return;
-  const response = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?a=Thai');
+async function loadRemoteMeals(type) {
+  if (remoteMeals[type] && remoteMeals[type].length > 0) return;
+
+  let url;
+  if (type === 'thai') {
+    url = 'https://www.themealdb.com/api/json/v1/1/filter.php?a=Thai';
+  } else {
+    url = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+  }
+
+  const response = await fetch(url);
   if (!response.ok) throw new Error('Network response was not ok');
   const data = await response.json();
   if (!data.meals || !Array.isArray(data.meals)) {
-    throw new Error('No Thai meals returned');
+    throw new Error('No meals returned');
   }
-  thaiMeals = data.meals.slice(0, 6).map(meal => ({
+
+  remoteMeals[type] = data.meals.slice(0, 6).map(meal => ({
     title: meal.strMeal,
-    text: 'Try this Thai-style meal with lean protein, fresh veggies, and less oil.',
-    image: meal.strMealThumb,
+    text: meal.strInstructions ? meal.strInstructions.slice(0, 120) + '...' : 'Try this meal with lean protein, veggies, and balanced carbs.',
+    url: meal.strSource || `https://www.themealdb.com/meal/${meal.idMeal}`,
   }));
 }
 
-function generateThaiMealCards() {
-  return thaiMeals.map(meal => `
+function generateRemoteMealCards(type) {
+  return remoteMeals[type].map(meal => `
+    <div class="diet-meal">
+      <h4>${meal.title}</h4>
+      <p>${meal.text}</p>
+      <p style="margin-top:8px; font-size:12px; color:#7a7063;"><a href="${meal.url}" target="_blank" rel="noopener noreferrer">Open recipe</a></p>
+    </div>
+  `).join('');
+}
+
+function generateFallbackThaiCards() {
+  return FALLBACK_THAI_MEALS.map(meal => `
+    <div class="diet-meal">
+      <h4>${meal.title}</h4>
+      <p>${meal.text}</p>
+    </div>
+  `).join('');
+}
+
+function generateFallbackGeneralCards() {
+  return FALLBACK_GENERAL_MEALS.map(meal => `
     <div class="diet-meal">
       <h4>${meal.title}</h4>
       <p>${meal.text}</p>
