@@ -390,6 +390,10 @@
     margin-bottom: 18px;
   }
 
+  .diet-source {
+    margin-top: 10px;
+  }
+
   .diet-card {
     padding: 16px;
     border: 1px solid var(--line);
@@ -548,6 +552,12 @@
               <option value="maintain">Maintain</option>
             </select>
           </label>
+          <label class="diet-source">Meal choices
+            <select id="dietSource" onchange="onDietInputChange('source', this.value)">
+              <option value="local">General favorites</option>
+              <option value="thai">Thai-style alternatives</option>
+            </select>
+          </label>
         </div>
       </div>
       <div class="diet-card">
@@ -681,9 +691,11 @@ const DEFAULT_DIET_STATE = {
   weight: 80,
   activity: 'light',
   goal: 'fat_loss',
+  source: 'local',
 };
 
 let dietState = { ...DEFAULT_DIET_STATE };
+let thaiMeals = [];
 
 function loadState() {
   try {
@@ -932,6 +944,7 @@ function updateDietPanel() {
     weight: document.getElementById('dietWeight'),
     activity: document.getElementById('dietActivity'),
     goal: document.getElementById('dietGoal'),
+    source: document.getElementById('dietSource'),
   };
 
   Object.entries(profileInputs).forEach(([key, input]) => {
@@ -945,7 +958,19 @@ function updateDietPanel() {
     ? `Goal: steady fat loss with a moderate deficit from your estimated ${tdee} kcal maintenance.`
     : `Goal: maintain weight and stay consistent with balanced energy intake.`;
 
-  document.getElementById('dietMeals').innerHTML = generateMealCards(target);
+  const mealsEl = document.getElementById('dietMeals');
+  if (dietState.source === 'thai') {
+    mealsEl.innerHTML = `<div class="diet-meal"><h4>Loading Thai options…</h4><p>Fetching recipes from the internet.</p></div>`;
+    loadThaiMeals().then(() => {
+      if (dietState.source === 'thai') {
+        mealsEl.innerHTML = thaiMeals.length ? generateThaiMealCards() : `<div class="diet-meal"><h4>No Thai meals found</h4><p>Try again later or switch back to general meals.</p></div>`;
+      }
+    }).catch(err => {
+      mealsEl.innerHTML = `<div class="diet-meal"><h4>Unable to load Thai meals</h4><p>${err.message}</p></div>`;
+    });
+  } else {
+    mealsEl.innerHTML = generateMealCards(target);
+  }
 }
 
 function computeDietTargets() {
@@ -975,6 +1000,30 @@ function generateMealCards() {
   ];
 
   return meals.map(meal => `
+    <div class="diet-meal">
+      <h4>${meal.title}</h4>
+      <p>${meal.text}</p>
+    </div>
+  `).join('');
+}
+
+async function loadThaiMeals() {
+  if (thaiMeals.length > 0) return;
+  const response = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?a=Thai');
+  if (!response.ok) throw new Error('Network response was not ok');
+  const data = await response.json();
+  if (!data.meals || !Array.isArray(data.meals)) {
+    throw new Error('No Thai meals returned');
+  }
+  thaiMeals = data.meals.slice(0, 6).map(meal => ({
+    title: meal.strMeal,
+    text: 'Try this Thai-style meal with lean protein, fresh veggies, and less oil.',
+    image: meal.strMealThumb,
+  }));
+}
+
+function generateThaiMealCards() {
+  return thaiMeals.map(meal => `
     <div class="diet-meal">
       <h4>${meal.title}</h4>
       <p>${meal.text}</p>
