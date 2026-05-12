@@ -522,8 +522,33 @@ const PHASE_INFO = [
 
 const DAY_NAMES = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
 
+const STORAGE_KEY = 'hmTrainingProgramState';
 let currentWeek = 1;
 let checked = {}; // key: "wk-day-taskIdx"
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    if (typeof state.currentWeek === 'number') {
+      currentWeek = Math.max(1, Math.min(12, state.currentWeek));
+    }
+    if (state.checked && typeof state.checked === 'object') {
+      checked = state.checked;
+    }
+  } catch (err) {
+    console.warn('Could not load saved state', err);
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentWeek, checked }));
+  } catch (err) {
+    console.warn('Could not save state', err);
+  }
+}
 
 function getPhaseNum(w) {
   if (w <= 4) return 1;
@@ -538,6 +563,7 @@ function getPhaseInfo(w) {
 function changeWeek(d) {
   currentWeek = Math.max(1, Math.min(12, currentWeek + d));
   render();
+  saveState();
 }
 
 function toggleTask(key) {
@@ -549,6 +575,7 @@ function toggleTask(key) {
     setTimeout(() => el.classList.remove('just-done'), 300);
   }
   updateSummary();
+  saveState();
 }
 
 function buildDayTasks(dayIdx) {
@@ -736,6 +763,7 @@ function updateSummary() {
   document.getElementById('sbDone').textContent = `${done}/${total}`;
 }
 
+loadState();
 render();
 </script>
 </body>
