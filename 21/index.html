@@ -358,6 +358,109 @@
     line-height: 1.5;
   }
 
+  .diet-panel {
+    margin: 20px 24px 36px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: white;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.04);
+  }
+
+  .diet-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .diet-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .diet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .diet-card {
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--cream);
+  }
+
+  .diet-card strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--rest);
+    text-transform: uppercase;
+  }
+
+  .diet-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .diet-input-group {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .diet-input-group label {
+    font-size: 12px;
+    color: var(--ink);
+    display: grid;
+    gap: 6px;
+  }
+
+  .diet-input-group input,
+  .diet-input-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 14px;
+    background: white;
+    color: var(--ink);
+  }
+
+  .diet-meals {
+    display: grid;
+    gap: 12px;
+  }
+
+  .diet-meal {
+    padding: 14px;
+    border-radius: 16px;
+    background: #faf7f2;
+    border: 1px solid #ece3d7;
+  }
+
+  .diet-meal h4 {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .diet-meal p {
+    font-size: 13px;
+    color: #5f5a50;
+    line-height: 1.5;
+  }
+
   @keyframes checkPop {
     0% { transform: scale(1); }
     50% { transform: scale(1.2); }
@@ -413,6 +516,52 @@
         <div class="sb-key">done</div>
       </div>
     </div>
+  </div>
+
+  <div class="diet-panel" id="dietPanel">
+    <div class="diet-title">Diet planner</div>
+    <div class="diet-desc">Personalized fat-loss calorie and macro targets for your current stats.</div>
+
+    <div class="diet-grid">
+      <div class="diet-card">
+        <strong>Profile</strong>
+        <div class="diet-input-group">
+          <label>Age
+            <input type="number" id="dietAge" min="15" max="80" onchange="onDietInputChange('age', this.value)" />
+          </label>
+          <label>Height (cm)
+            <input type="number" id="dietHeight" min="120" max="220" onchange="onDietInputChange('height', this.value)" />
+          </label>
+          <label>Weight (kg)
+            <input type="number" id="dietWeight" min="40" max="200" onchange="onDietInputChange('weight', this.value)" />
+          </label>
+          <label>Activity level
+            <select id="dietActivity" onchange="onDietInputChange('activity', this.value)">
+              <option value="light">Light</option>
+              <option value="moderate">Moderate</option>
+              <option value="heavy">Heavy</option>
+            </select>
+          </label>
+          <label>Goal
+            <select id="dietGoal" onchange="onDietInputChange('goal', this.value)">
+              <option value="fat_loss">Lose fat</option>
+              <option value="maintain">Maintain</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="diet-card">
+        <strong>Daily targets</strong>
+        <div class="diet-value" id="dietCals">— kcal</div>
+        <div class="diet-value" id="dietMacros" style="font-size:14px;font-weight:500; margin-top:8px; color:#57514a"></div>
+      </div>
+      <div class="diet-card">
+        <strong>Notes</strong>
+        <p id="dietNote">Lower calories by about 500 kcal for steady fat loss. Keep protein high to preserve muscle.</p>
+      </div>
+    </div>
+
+    <div class="diet-meals" id="dietMeals"></div>
   </div>
 
 </div>
@@ -544,9 +693,38 @@ function loadState() {
 
 function saveState() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentWeek, checked }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentWeek, checked, diet: dietState }));
   } catch (err) {
     console.warn('Could not save state', err);
+  }
+}
+
+const DEFAULT_DIET_STATE = {
+  age: 26,
+  height: 170,
+  weight: 80,
+  activity: 'light',
+  goal: 'fat_loss',
+};
+
+let dietState = { ...DEFAULT_DIET_STATE };
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    if (typeof state.currentWeek === 'number') {
+      currentWeek = Math.max(1, Math.min(12, state.currentWeek));
+    }
+    if (state.checked && typeof state.checked === 'object') {
+      checked = state.checked;
+    }
+    if (state.diet && typeof state.diet === 'object') {
+      dietState = { ...DEFAULT_DIET_STATE, ...state.diet };
+    }
+  } catch (err) {
+    console.warn('Could not load saved state', err);
   }
 }
 
@@ -577,6 +755,70 @@ function toggleTask(key) {
   updateSummary();
   saveState();
 }
+
+function updateDietPanel() {
+  const profileInputs = {
+    age: document.getElementById('dietAge'),
+    height: document.getElementById('dietHeight'),
+    weight: document.getElementById('dietWeight'),
+    activity: document.getElementById('dietActivity'),
+    goal: document.getElementById('dietGoal'),
+  };
+
+  Object.entries(profileInputs).forEach(([key, input]) => {
+    if (input) input.value = dietState[key];
+  });
+
+  const { target, protein, fat, carbs, bmr, tdee } = computeDietTargets();
+  document.getElementById('dietCals').textContent = `${target} kcal`;
+  document.getElementById('dietMacros').textContent = `${protein}g protein · ${fat}g fat · ${carbs}g carbs`;
+  document.getElementById('dietNote').textContent = dietState.goal === 'fat_loss'
+    ? `Goal: steady fat loss with a moderate deficit from your estimated ${tdee} kcal maintenance.`
+    : `Goal: maintain weight and stay consistent with balanced energy intake.`;
+
+  document.getElementById('dietMeals').innerHTML = generateMealCards(target);
+}
+
+function computeDietTargets() {
+  const age = Number(dietState.age);
+  const height = Number(dietState.height);
+  const weight = Number(dietState.weight);
+  const activityFactors = {
+    light: 1.35,
+    moderate: 1.55,
+    heavy: 1.75,
+  };
+  const bmr = Math.round(10 * weight + 6.25 * height - 5 * age + 5);
+  const tdee = Math.round(bmr * (activityFactors[dietState.activity] || 1.35));
+  const target = Math.max(1200, dietState.goal === 'fat_loss' ? tdee - 500 : tdee);
+  const protein = Math.round(weight * 2.0);
+  const fat = Math.round((target * 0.25) / 9);
+  const carbs = Math.max(0, Math.round((target - protein * 4 - fat * 9) / 4));
+  return { bmr, tdee, target, protein, fat, carbs };
+}
+
+function generateMealCards(calories) {
+  const meals = [
+    { title: 'Breakfast', text: 'Greek yogurt with berries, a handful of nuts, and oats.' },
+    { title: 'Lunch', text: 'Grilled chicken salad with mixed greens, quinoa, avocado and olive oil.' },
+    { title: 'Snack', text: 'Cottage cheese or hummus with fresh veggies.' },
+    { title: 'Dinner', text: 'Salmon or tofu bowl with roasted vegetables and brown rice.' },
+  ];
+
+  return meals.map(meal => `
+    <div class="diet-meal">
+      <h4>${meal.title}</h4>
+      <p>${meal.text}</p>
+    </div>
+  `).join('');
+}
+
+function onDietInputChange(key, value) {
+  dietState[key] = value;
+  updateDietPanel();
+  saveState();
+}
+
 
 function buildDayTasks(dayIdx) {
   const w = currentWeek;
@@ -765,6 +1007,7 @@ function updateSummary() {
 
 loadState();
 render();
+updateDietPanel();
 </script>
 </body>
 </html>
