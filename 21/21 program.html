@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12-Week Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --paper: #f2ede4;
+    --cream: #e8e2d6;
+    --line: #d4cdc0;
+    --run: #bf3a1c;
+    --lift: #1a5cbf;
+    --rest: #888070;
+    --check: #2a7a48;
+    --warn: #c47a10;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* NOTEBOOK TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      var(--line) 27px,
+      var(--line) 28px
+    );
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+
+  /* HEADER */
+  .header {
+    padding: 32px 24px 20px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .header-left {}
+
+  .header-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rest);
+    margin-bottom: 4px;
+  }
+
+  .header-week {
+    font-family: 'Space Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .header-week span { color: var(--run); }
+
+  .header-right { text-align: right; }
+
+  .phase-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1.5px solid var(--ink);
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .week-stats {
+    font-size: 11px;
+    color: var(--rest);
+    line-height: 1.5;
+  }
+
+  /* PROGRESS */
+  .progress-track {
+    padding: 10px 24px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pt-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--rest);
+    margin-right: 6px;
+    white-space: nowrap;
+  }
+
+  .pt-seg {
+    flex: 1; height: 3px;
+    background: var(--line);
+    transition: background 0.2s;
+  }
+
+  .pt-seg.done { background: var(--run); }
+  .pt-seg.now { background: var(--ink); }
+
+  /* WEEK ARROWS */
+  .week-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 24px;
+    border-bottom: 1px solid var(--line);
+    background: var(--cream);
+  }
+
+  .wn-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: none;
+    border: 1.5px solid var(--ink);
+    padding: 4px 12px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: all 0.12s;
+    letter-spacing: 1px;
+  }
+
+  .wn-btn:hover { background: var(--ink); color: var(--paper); }
+  .wn-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .wn-btn:hover:disabled { background: none; color: var(--ink); }
+
+  .wn-middle {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--rest);
+  }
+
+  /* TO-DO LIST */
+  .todo-list { padding: 0 24px; }
+
+  .day-block { border-bottom: 1px dashed var(--line); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0 8px;
+  }
+
+  .day-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rest);
+    min-width: 42px;
+  }
+
+  .day-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .day-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid;
+  }
+
+  .tag-run { color: var(--run); border-color: var(--run); background: #bf3a1c0a; }
+  .tag-lift { color: var(--lift); border-color: var(--lift); background: #1a5cbf0a; }
+  .tag-both { color: var(--warn); border-color: var(--warn); background: #c47a100a; }
+  .tag-rest { color: var(--rest); border-color: var(--line); }
+
+  /* TASK ITEM */
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 7px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .task:last-child { padding-bottom: 14px; }
+
+  .checkbox {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--line);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+    background: white;
+  }
+
+  .task:hover .checkbox { border-color: var(--ink); }
+
+  .task.done .checkbox {
+    background: var(--check);
+    border-color: var(--check);
+  }
+
+  .checkmark {
+    width: 10px; height: 7px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) translateY(-1px);
+    display: none;
+  }
+
+  .task.done .checkmark { display: block; }
+
+  .task-body { flex: 1; }
+
+  .task-main {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .task-text {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.3;
+    transition: color 0.12s;
+  }
+
+  .task.done .task-text {
+    color: var(--rest);
+    text-decoration: line-through;
+    text-decoration-color: var(--line);
+  }
+
+  .task-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .badge-run { color: var(--run); }
+  .badge-lift { color: var(--lift); }
+
+  .task-sub {
+    font-size: 11px;
+    color: var(--rest);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  .task.done .task-sub { opacity: 0.5; }
+
+  /* INDENT SUB-EXERCISES */
+  .task.sub-task {
+    padding-left: 30px;
+  }
+
+  .task.sub-task .task-text { font-size: 13px; font-weight: 400; }
+
+  .task.sub-task .checkbox {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+  }
+
+  /* REST DAY */
+  .rest-note {
+    padding: 10px 0 16px 30px;
+    font-size: 13px;
+    color: var(--rest);
+    font-style: italic;
+  }
+
+  /* BOTTOM SUMMARY */
+  .summary-bar {
+    position: sticky;
+    bottom: 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .sb-left {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .sb-left span { color: var(--warn); }
+
+  .sb-right {
+    display: flex;
+    gap: 16px;
+  }
+
+  .sb-stat {
+    text-align: right;
+  }
+
+  .sb-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .sb-num.r { color: var(--run); }
+  .sb-num.b { color: #5b9af0; }
+
+  .sb-key {
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    margin-top: 1px;
+  }
+
+  /* PHASE BANNER */
+  .phase-banner {
+    margin: 12px 24px 0;
+    padding: 8px 12px;
+    border-left: 3px solid var(--ink);
+    background: var(--cream);
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  @keyframes checkPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  .task.just-done .checkbox { animation: checkPop 0.2s ease; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="header-title">Half Marathon + Strength</div>
+      <div class="header-week">WK <span id="weekNum">01</span></div>
+    </div>
+    <div class="header-right">
+      <div class="phase-label" id="phaseLabel">PHASE 1</div>
+      <div class="week-stats" id="weekStats"></div>
+    </div>
+  </div>
+
+  <div class="progress-track">
+    <div class="pt-label">WK 1</div>
+    <div style="display:flex;gap:4px;flex:1" id="progSegs"></div>
+    <div class="pt-label">12</div>
+  </div>
+
+  <div class="week-nav">
+    <button class="wn-btn" id="prevBtn" onclick="changeWeek(-1)">← PREV</button>
+    <div class="wn-middle" id="wkMid">12 WEEKS TO RACE</div>
+    <button class="wn-btn" id="nextBtn" onclick="changeWeek(1)">NEXT →</button>
+  </div>
+
+  <div class="phase-banner" id="phaseBanner"></div>
+
+  <div class="todo-list" id="todoList"></div>
+
+  <div class="summary-bar">
+    <div class="sb-left">WEEK <span id="sbWeek">1</span> / 12</div>
+    <div class="sb-right">
+      <div class="sb-stat">
+        <div class="sb-num r" id="sbKm">—</div>
+        <div class="sb-key">km run</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-num b" id="sbLifts">—</div>
+        <div class="sb-key">lift days</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-num" id="sbDone" style="color:#f2ede4">0/0</div>
+        <div class="sb-key">done</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Fixed schedule:
+// MON: Upper Body lift
+// TUE: Full Body / Power lift  ← moved from FRI
+// WED: Easy Run
+// THU: Lower Body lift
+// FRI: Upper Body light OR rest  ← no heavy legs before long run
+// SAT: Long Run
+// SUN: Full Rest
+
+// Running program (same as before)
+const RUN_PROGRAM = [
+  [[5,'easy'],[0,null],[5,'easy'],[0,null],[0,null],[8,'long'],[0,null]],
+  [[5,'easy'],[0,null],[6,'easy'],[0,null],[0,null],[9,'long'],[0,null]],
+  [[6,'easy'],[0,null],[6,'easy'],[0,null],[0,null],[11,'long'],[0,null]],
+  [[5,'easy'],[0,null],[5,'easy'],[0,null],[0,null],[8,'long'],[0,null]],
+  [[6,'easy'],[0,null],[8,'tempo'],[0,null],[5,'easy'],[13,'long'],[0,null]],
+  [[6,'easy'],[0,null],[8,'tempo'],[0,null],[6,'easy'],[15,'long'],[0,null]],
+  [[6,'easy'],[0,null],[10,'tempo'],[0,null],[6,'easy'],[16,'long'],[0,null]],
+  [[5,'easy'],[0,null],[8,'tempo'],[0,null],[5,'easy'],[11,'long'],[0,null]],
+  [[6,'easy'],[0,null],[10,'tempo'],[0,null],[6,'easy'],[18,'long'],[0,null]],
+  [[6,'easy'],[0,null],[10,'tempo'],[0,null],[6,'easy'],[19,'long'],[0,null]],
+  [[5,'easy'],[0,null],[8,'tempo'],[0,null],[5,'easy'],[13,'long'],[0,null]],
+  [[5,'easy'],[0,null],[5,'easy'],[0,null],[0,null],[21,'long'],[0,null]],
+];
+
+// Lift sessions per phase
+// MON=upper, TUE=power, THU=lower, FRI=rest (no lifting)
+const LIFT = {
+  1: {
+    upper: [
+      { name:'Bench Press', sets:'4×8', note:'RPE 7 — controlled eccentric' },
+      { name:'Barbell Row', sets:'4×8', note:'Drive elbows back' },
+      { name:'Overhead Press', sets:'3×10', note:'Strict form' },
+      { name:'Pull-ups', sets:'3×8', note:'Full ROM' },
+      { name:'Lateral Raise', sets:'3×12', note:'Shoulder health — light' },
+    ],
+    power: [
+      { name:'Deadlift', sets:'4×6', note:'Hinge focus — posterior chain' },
+      { name:'Power Clean', sets:'4×4', note:'Explosive — 2 min rest' },
+      { name:'Front Squat', sets:'3×6', note:'Upright torso' },
+      { name:'Hip Thrust', sets:'3×12', note:'Glutes = running engine' },
+      { name:'Farmer Carry', sets:'3×30m', note:'Grip + core + posture' },
+    ],
+    lower: [
+      { name:'Back Squat', sets:'4×8', note:'Full depth, RPE 7' },
+      { name:'Romanian Deadlift', sets:'4×10', note:'Hamstring focus — key for running' },
+      { name:'Bulgarian Split Squat', sets:'3×10/leg', note:'Single-leg stability' },
+      { name:'Calf Raise', sets:'4×15', note:'Slow & full ROM — injury prevention' },
+      { name:'Plank / Dead Bug', sets:'3×45s', note:'Running posture core' },
+    ],
+  },
+  2: {
+    upper: [
+      { name:'Bench Press', sets:'5×5', note:'85%+ 1RM — 3 min rest' },
+      { name:'Barbell Row', sets:'5×5', note:'Match bench volume' },
+      { name:'Overhead Press', sets:'4×6', note:'Strict — no leg drive' },
+      { name:'Weighted Pull-ups', sets:'4×5', note:'Add belt weight' },
+      { name:'Face Pull', sets:'3×15', note:'Rotator cuff health' },
+    ],
+    power: [
+      { name:'Deadlift', sets:'5×3', note:'90%+ 1RM — near max' },
+      { name:'Power Clean', sets:'5×3', note:'Explosive, rest 2–3 min' },
+      { name:'Push Press', sets:'4×4', note:'Hip drive — full body power' },
+      { name:'Hip Thrust', sets:'4×8', note:'Heavy for glute strength' },
+      { name:'Sled Push / Sprint', sets:'4×20m', note:'Power transfer to running' },
+    ],
+    lower: [
+      { name:'Back Squat', sets:'5×5', note:'85%+ 1RM — quality reps' },
+      { name:'Romanian Deadlift', sets:'4×6', note:'Heavier, still controlled' },
+      { name:'Walking Lunge', sets:'3×12/leg', note:'Mimics running gait' },
+      { name:'Leg Curl', sets:'3×10', note:'Hamstring strength = less injury' },
+      { name:'Calf Raise', sets:'4×12', note:'Add load this phase' },
+    ],
+  },
+  3: {
+    upper: [
+      { name:'Bench Press', sets:'3×3', note:'Heavy — no grinding' },
+      { name:'Barbell Row', sets:'3×5', note:'Maintain strength' },
+      { name:'Overhead Press', sets:'3×5', note:'Taper volume, keep intensity' },
+      { name:'Pull-ups', sets:'3×6', note:'Bodyweight — lighter week' },
+    ],
+    power: [
+      { name:'Goblet Squat', sets:'2×10', note:'Activation only — light' },
+      { name:'Hip Thrust (BW)', sets:'2×15', note:'Glute activation pre-race' },
+      { name:'Dead Bug', sets:'2×10/side', note:'Core only' },
+      { name:'Calf Raise (BW)', sets:'2×20', note:'Blood flow, no fatigue' },
+    ],
+    lower: [
+      { name:'Back Squat', sets:'3×3', note:'Heavy but low volume' },
+      { name:'Romanian Deadlift', sets:'3×5', note:'Maintain stimulus' },
+      { name:'Hip Thrust', sets:'3×8', note:'Protect glute strength' },
+      { name:'Calf Raise', sets:'3×12', note:'Light — avoid DOMS before race' },
+    ],
+  }
+};
+
+const PHASE_INFO = [
+  { weeks:[1,2,3,4], name:'PHASE 1 — FREQUENCY', desc:'Build the habit. 3 run days, 3 lift days. Focus on consistency and form over intensity.' },
+  { weeks:[5,6,7,8,9], name:'PHASE 2 — BUILD', desc:'Add tempo runs. Increase long run distance weekly. Push heavier in the gym.' },
+  { weeks:[10,11,12], name:'PHASE 3 — PEAK & TAPER', desc:'Peak effort week 10, then taper. Cut lift volume 30%, keep intensity. Arrive at race day fresh.' },
+];
+
+const DAY_NAMES = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+
+let currentWeek = 1;
+let checked = {}; // key: "wk-day-taskIdx"
+
+function getPhaseNum(w) {
+  if (w <= 4) return 1;
+  if (w <= 9) return 2;
+  return 3;
+}
+
+function getPhaseInfo(w) {
+  return PHASE_INFO.find(p => p.weeks.includes(w));
+}
+
+function changeWeek(d) {
+  currentWeek = Math.max(1, Math.min(12, currentWeek + d));
+  render();
+}
+
+function toggleTask(key) {
+  checked[key] = !checked[key];
+  const el = document.querySelector(`[data-key="${key}"]`);
+  if (el) {
+    el.classList.toggle('done', checked[key]);
+    el.classList.add('just-done');
+    setTimeout(() => el.classList.remove('just-done'), 300);
+  }
+  updateSummary();
+}
+
+function buildDayTasks(dayIdx) {
+  const w = currentWeek;
+  const phaseNum = getPhaseNum(w);
+  const liftData = LIFT[phaseNum];
+  const runData = RUN_PROGRAM[w - 1][dayIdx];
+  const [km, runType] = runData;
+
+  const tasks = [];
+
+  // Assign lift sessions
+  // MON(0)=upper, TUE(1)=power, THU(3)=lower, rest=no lift
+  const liftSession = dayIdx === 0 ? 'upper' : dayIdx === 1 ? 'power' : dayIdx === 3 ? 'lower' : null;
+
+  if (km > 0) {
+    const runLabels = {
+      easy: { label: 'Easy Run', note: 'Conversational pace — can talk freely' },
+      tempo: { label: 'Tempo Run', note: 'Comfortably hard — 2-3 words max' },
+      long: { label: 'Long Run', note: 'Slow & steady — build endurance' },
+    };
+    const info = runLabels[runType];
+    tasks.push({ type: 'run', text: info.label, badge: km + ' km', sub: info.note, key: `${w}-${dayIdx}-run` });
+  }
+
+  if (liftSession) {
+    const exercises = liftData[liftSession];
+    const sessionNames = { upper: 'Upper Body', power: 'Full Body / Power', lower: 'Lower Body' };
+    tasks.push({ type: 'lift-header', text: sessionNames[liftSession], sub: null, key: `${w}-${dayIdx}-lift` });
+    exercises.forEach((ex, i) => {
+      tasks.push({ type: 'lift-sub', text: ex.name, badge: ex.sets, sub: ex.note, key: `${w}-${dayIdx}-ex${i}` });
+    });
+  }
+
+  return tasks;
+}
+
+function getDayTag(dayIdx) {
+  const runData = RUN_PROGRAM[currentWeek - 1][dayIdx];
+  const [km] = runData;
+  const liftSession = dayIdx === 0 ? 'upper' : dayIdx === 1 ? 'power' : dayIdx === 3 ? 'lower' : null;
+
+  if (km > 0 && liftSession) return { text: 'RUN + LIFT', cls: 'tag-both' };
+  if (km > 0) return { text: runData[1] === 'long' ? 'LONG RUN' : runData[1] === 'tempo' ? 'TEMPO' : 'EASY RUN', cls: 'tag-run' };
+  if (liftSession) return { text: liftSession === 'upper' ? 'UPPER' : liftSession === 'power' ? 'POWER' : 'LOWER', cls: 'tag-lift' };
+  return { text: 'REST', cls: 'tag-rest' };
+}
+
+function render() {
+  // Progress
+  const segs = document.getElementById('progSegs');
+  segs.innerHTML = '';
+  for (let i = 1; i <= 12; i++) {
+    const s = document.createElement('div');
+    s.className = 'pt-seg' + (i < currentWeek ? ' done' : i === currentWeek ? ' now' : '');
+    segs.appendChild(s);
+  }
+
+  // Header
+  document.getElementById('weekNum').textContent = String(currentWeek).padStart(2, '0');
+  document.getElementById('prevBtn').disabled = currentWeek === 1;
+  document.getElementById('nextBtn').disabled = currentWeek === 12;
+  document.getElementById('wkMid').textContent = `${12 - currentWeek + 1} WEEK${12 - currentWeek + 1 !== 1 ? 'S' : ''} TO RACE`;
+  document.getElementById('sbWeek').textContent = currentWeek;
+
+  const phaseInfo = getPhaseInfo(currentWeek);
+  const phaseNum = getPhaseNum(currentWeek);
+  document.getElementById('phaseLabel').textContent = `PHASE ${phaseNum}`;
+  document.getElementById('phaseBanner').textContent = phaseInfo.desc;
+
+  const runWeek = RUN_PROGRAM[currentWeek - 1];
+  const totalKm = runWeek.reduce((s, [k]) => s + k, 0);
+  const liftDays = [0, 1, 3].length; // always 3
+  document.getElementById('weekStats').innerHTML = `${totalKm} km this week<br>3 lift sessions`;
+
+  // Build todo list
+  const list = document.getElementById('todoList');
+  list.innerHTML = '';
+
+  DAY_NAMES.forEach((dayName, dayIdx) => {
+    const tasks = buildDayTasks(dayIdx);
+    const tag = getDayTag(dayIdx);
+    const isRest = tasks.length === 0;
+
+    const block = document.createElement('div');
+    block.className = 'day-block';
+
+    const header = document.createElement('div');
+    header.className = 'day-header';
+    header.innerHTML = `
+      <div class="day-name">${dayName}</div>
+      <div class="day-divider"></div>
+      <div class="day-tag ${tag.cls}">${tag.text}</div>
+    `;
+    block.appendChild(header);
+
+    if (isRest) {
+      const note = document.createElement('div');
+      note.className = 'rest-note';
+      note.textContent = dayIdx === 4 ? 'Rest — legs fresh for tomorrow\'s long run 🙌' : 'Full rest. Sleep well, eat well.';
+      block.appendChild(note);
+    } else {
+      tasks.forEach(task => {
+        if (task.type === 'lift-header') {
+          const item = document.createElement('div');
+          item.className = 'task';
+          item.dataset.key = task.key;
+          item.setAttribute('onclick', `toggleTask('${task.key}')`);
+          const isDone = checked[task.key];
+          if (isDone) item.classList.add('done');
+          item.innerHTML = `
+            <div class="checkbox"><div class="checkmark"></div></div>
+            <div class="task-body">
+              <div class="task-main">
+                <div class="task-text" style="font-weight:600;color:var(--lift)">${task.text}</div>
+                <div class="task-badge badge-lift">🏋️</div>
+              </div>
+            </div>
+          `;
+          block.appendChild(item);
+        } else if (task.type === 'lift-sub') {
+          const item = document.createElement('div');
+          item.className = 'task sub-task';
+          item.dataset.key = task.key;
+          item.setAttribute('onclick', `toggleTask('${task.key}')`);
+          const isDone = checked[task.key];
+          if (isDone) item.classList.add('done');
+          item.innerHTML = `
+            <div class="checkbox"><div class="checkmark"></div></div>
+            <div class="task-body">
+              <div class="task-main">
+                <div class="task-text">${task.text}</div>
+                <div class="task-badge badge-lift" style="font-size:11px">${task.badge}</div>
+              </div>
+              <div class="task-sub">${task.sub}</div>
+            </div>
+          `;
+          block.appendChild(item);
+        } else {
+          const item = document.createElement('div');
+          item.className = 'task';
+          item.dataset.key = task.key;
+          item.setAttribute('onclick', `toggleTask('${task.key}')`);
+          const isDone = checked[task.key];
+          if (isDone) item.classList.add('done');
+          item.innerHTML = `
+            <div class="checkbox"><div class="checkmark"></div></div>
+            <div class="task-body">
+              <div class="task-main">
+                <div class="task-text">${task.text}</div>
+                <div class="task-badge badge-run">${task.badge}</div>
+              </div>
+              <div class="task-sub">${task.sub}</div>
+            </div>
+          `;
+          block.appendChild(item);
+        }
+      });
+    }
+
+    list.appendChild(block);
+  });
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const w = currentWeek;
+  const runWeek = RUN_PROGRAM[w - 1];
+  const totalKm = runWeek.reduce((s, [k]) => s + k, 0);
+
+  // Count all checkable tasks
+  let total = 0, done = 0;
+  DAY_NAMES.forEach((_, dayIdx) => {
+    const tasks = buildDayTasks(dayIdx);
+    tasks.forEach(t => {
+      if (t.type !== 'lift-header') { total++; }
+      else { total++; }
+      if (checked[t.key]) done++;
+    });
+  });
+
+  document.getElementById('sbKm').textContent = totalKm;
+  document.getElementById('sbLifts').textContent = 3;
+  document.getElementById('sbDone').textContent = `${done}/${total}`;
+}
+
+render();
+</script>
+</body>
+</html>
