@@ -763,6 +763,13 @@
     margin-top: 4px;
   }
 
+  .food-alt {
+    font-size: 10px;
+    color: #a89878;
+    font-style: italic;
+    margin-top: 3px;
+  }
+
   .food-macros {
     display: flex;
     gap: 6px;
@@ -1079,27 +1086,27 @@ const DIET_MEAL_PLANS = {
     kcal: 1800,
     meals: [
       { name: 'Breakfast', time: '7:00 AM', kcal: 420, foods: [
-        { name: 'Oatmeal', portion: '80g dry', p: 10, c: 54, f: 6 },
-        { name: 'Boiled Eggs', portion: '3 whole', p: 18, c: 0, f: 14 },
-        { name: 'Banana', portion: '1 medium', p: 1, c: 27, f: 0 },
+        { name: 'Jok (Rice Porridge)', portion: '1.5 cups', p: 10, c: 54, f: 6, alt: 'or Oatmeal/Congee' },
+        { name: 'Fried Eggs', portion: '2 eggs', p: 14, c: 0, f: 12, alt: 'or Scrambled/Boiled' },
+        { name: 'Banana', portion: '1 medium', p: 1, c: 27, f: 0, alt: 'or Orange/Apple' },
       ] },
       { name: 'Pre-run Snack', time: '10:30 AM', kcal: 160, foods: [
-        { name: 'Rice cake / Bread', portion: '2 slices', p: 4, c: 30, f: 1 },
-        { name: 'Honey', portion: '1 tbsp', p: 0, c: 17, f: 0 },
+        { name: 'Sticky Rice / Khao Tom', portion: '1 cup cooked', p: 4, c: 30, f: 1, alt: 'or Bread/Rice cakes' },
+        { name: 'Banana with Peanut Butter', portion: '1 banana + 1 tbsp', p: 6, c: 17, f: 8, alt: 'or Toast with butter' },
       ] },
       { name: 'Post-run Lunch', time: '1:00 PM', kcal: 520, foods: [
-        { name: 'Chicken Breast', portion: '180g', p: 54, c: 0, f: 4 },
-        { name: 'Jasmine Rice', portion: '150g cooked', p: 4, c: 40, f: 0 },
-        { name: 'Stir-fried Vegetables', portion: '1 cup', p: 3, c: 10, f: 3 },
+        { name: 'Gai Yang (Grilled Chicken)', portion: '180g', p: 54, c: 0, f: 4, alt: 'or Rotisserie/Steamed chicken' },
+        { name: 'Jasmine Rice', portion: '150g cooked', p: 4, c: 40, f: 0, alt: 'or any white rice' },
+        { name: 'Papaya Salad (Som Tam)', portion: '1 cup', p: 3, c: 10, f: 3, alt: 'or mixed green salad' },
       ] },
       { name: 'Afternoon Snack', time: '4:00 PM', kcal: 200, foods: [
-        { name: 'Greek Yogurt', portion: '150g', p: 15, c: 8, f: 3 },
-        { name: 'Mixed Berries', portion: '100g', p: 1, c: 15, f: 0 },
+        { name: 'Thai Iced Tea', portion: '1 glass (unsweetened)', p: 4, c: 10, f: 8, alt: 'or Black coffee with milk' },
+        { name: 'Boiled Eggs', portion: '2 eggs', p: 12, c: 2, f: 10, alt: 'or Fried eggs' },
       ] },
       { name: 'Dinner', time: '7:00 PM', kcal: 500, foods: [
-        { name: 'Salmon / Tilapia', portion: '180g', p: 42, c: 0, f: 12 },
-        { name: 'Sweet Potato', portion: '150g', p: 3, c: 35, f: 0 },
-        { name: 'Broccoli', portion: '1 cup', p: 4, c: 8, f: 0 },
+        { name: 'Pad Cha (Stir-fried Fish / Pork)', portion: '180g', p: 42, c: 0, f: 12, alt: 'or Grilled fish/Beef' },
+        { name: 'Jasmine Rice', portion: '120g cooked', p: 3, c: 32, f: 0, alt: 'or any white rice' },
+        { name: 'Pad Pak (Stir-fried Vegetables)', portion: '1 cup', p: 4, c: 8, f: 3, alt: 'or Steamed veggies' },
       ] },
     ]
   },
@@ -1107,26 +1114,26 @@ const DIET_MEAL_PLANS = {
     kcal: 1800,
     meals: [
       { name: 'Breakfast', time: '7:00 AM', kcal: 420, foods: [
-        { name: 'Eggs Scrambled', portion: '4 whole', p: 24, c: 0, f: 18 },
-        { name: 'Whole Grain Toast', portion: '2 slices', p: 8, c: 28, f: 3 },
-        { name: 'Avocado', portion: '½ medium', p: 1, c: 6, f: 11 },
+        { name: 'Khao Pad Gai (Chicken Fried Rice)', portion: '1.5 cups', p: 24, c: 40, f: 10, alt: 'or Jok + chicken' },
+        { name: 'Fried Egg', portion: '1 egg', p: 6, c: 0, f: 5, alt: 'or Scrambled' },
       ] },
       { name: 'Pre-lift Snack', time: '11:00 AM', kcal: 200, foods: [
-        { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0 },
-        { name: 'Whey Protein', portion: '1 scoop / 250ml', p: 20, c: 8, f: 2 },
+        { name: 'Banana with Condensed Milk', portion: '1 banana + 2 tbsp', p: 2, c: 32, f: 2, alt: 'or Banana with honey' },
+        { name: 'Fried Chicken (store)', portion: '1 piece', p: 15, c: 6, f: 8, alt: 'or Boiled eggs' },
       ] },
       { name: 'Post-lift Lunch', time: '1:30 PM', kcal: 550, foods: [
-        { name: 'Ground Beef / Tofu', portion: '200g', p: 46, c: 0, f: 14 },
-        { name: 'Rice / Quinoa', portion: '150g cooked', p: 5, c: 40, f: 2 },
-        { name: 'Mixed Salad', portion: '2 cups', p: 3, c: 8, f: 0 },
+        { name: 'Pad Krapow Moo (Pork with Basil)', portion: '200g', p: 46, c: 0, f: 14, alt: 'or Pad Prio Wan (sweet pork)' },
+        { name: 'Jasmine Rice', portion: '150g cooked', p: 5, c: 40, f: 2, alt: 'or any white rice' },
+        { name: 'Thai Cucumber Salad', portion: '1 cup', p: 3, c: 8, f: 0, alt: 'or Green salad' },
       ] },
       { name: 'Afternoon Snack', time: '4:30 PM', kcal: 130, foods: [
-        { name: 'Cottage Cheese', portion: '150g', p: 18, c: 4, f: 2 },
+        { name: 'Sticky Rice with Mango', portion: '100g', p: 3, c: 28, f: 1, alt: 'or Sticky rice with banana' },
+        { name: 'Boiled Egg', portion: '1 egg', p: 6, c: 1, f: 5, alt: 'or Fried egg' },
       ] },
       { name: 'Dinner', time: '7:00 PM', kcal: 500, foods: [
-        { name: 'Chicken Thigh', portion: '200g', p: 46, c: 0, f: 10 },
-        { name: 'Brown Rice', portion: '120g cooked', p: 3, c: 30, f: 1 },
-        { name: 'Stir-fried Veggies + Egg', portion: '1 cup + 1 egg', p: 10, c: 12, f: 6 },
+        { name: 'Kai Tod (Fried Chicken)', portion: '200g', p: 46, c: 0, f: 10, alt: 'or Grilled chicken' },
+        { name: 'Jasmine Rice', portion: '120g cooked', p: 3, c: 30, f: 1, alt: 'or any white rice' },
+        { name: 'Pad Pak Ruam (Mixed Vegetables)', portion: '1 cup', p: 4, c: 8, f: 3, alt: 'or Steamed veggies' },
       ] },
     ]
   },
@@ -1134,22 +1141,21 @@ const DIET_MEAL_PLANS = {
     kcal: 1600,
     meals: [
       { name: 'Breakfast', time: '8:00 AM', kcal: 380, foods: [
-        { name: 'Oatmeal', portion: '60g dry', p: 8, c: 40, f: 5 },
-        { name: 'Boiled Eggs', portion: '2 whole', p: 12, c: 0, f: 10 },
-        { name: 'Apple', portion: '1 medium', p: 0, c: 25, f: 0 },
+        { name: 'Jok (Rice Porridge)', portion: '1 cup', p: 8, c: 40, f: 5, alt: 'or Oatmeal' },
+        { name: 'Boiled Eggs', portion: '2 eggs', p: 12, c: 0, f: 10, alt: 'or Fried eggs' },
       ] },
       { name: 'Lunch', time: '12:30 PM', kcal: 480, foods: [
-        { name: 'Tuna / Chicken Breast', portion: '160g', p: 44, c: 0, f: 3 },
-        { name: 'Rice (smaller portion)', portion: '100g cooked', p: 3, c: 26, f: 0 },
-        { name: 'Cucumber Salad', portion: '1 cup', p: 2, c: 8, f: 1 },
+        { name: 'Pad Thai (with Shrimp)', portion: '1 plate', p: 44, c: 40, f: 8, alt: 'or Pad See Ew' },
+        { name: 'Thai Green Salad', portion: '1 cup', p: 2, c: 8, f: 1, alt: 'or Cucumber salad' },
       ] },
       { name: 'Snack', time: '3:30 PM', kcal: 140, foods: [
-        { name: 'Greek Yogurt', portion: '150g plain', p: 15, c: 8, f: 3 },
+        { name: 'Roti with Egg', portion: '1 piece', p: 10, c: 15, f: 5, alt: 'or Toast with egg' },
+        { name: 'Banana', portion: '1 small', p: 1, c: 20, f: 0, alt: 'or Orange' },
       ] },
       { name: 'Dinner', time: '6:30 PM', kcal: 600, foods: [
-        { name: 'Pork Tenderloin / Fish', portion: '200g', p: 44, c: 0, f: 8 },
-        { name: 'Sweet Potato / Pumpkin', portion: '150g', p: 3, c: 30, f: 0 },
-        { name: 'Steamed Broccoli + Spinach', portion: '1.5 cups', p: 6, c: 10, f: 0 },
+        { name: 'Gaeng Phed (Red Curry with Pork)', portion: '200g pork + curry', p: 44, c: 15, f: 16, alt: 'or Gaeng Keow Wan (green curry)' },
+        { name: 'Jasmine Rice', portion: '150g cooked', p: 3, c: 38, f: 0, alt: 'or any white rice' },
+        { name: 'Ruam Pad (Mixed Stir-fry)', portion: '1 cup', p: 4, c: 8, f: 3, alt: 'or Steamed vegetables' },
       ] },
     ]
   },
@@ -1158,27 +1164,27 @@ const DIET_MEAL_PLANS = {
     note: '+300 kcal carb-up for 15km+ runs',
     meals: [
       { name: 'Pre-run Breakfast', time: '6:00 AM', kcal: 450, foods: [
-        { name: 'Oatmeal', portion: '100g dry', p: 12, c: 68, f: 6 },
-        { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0 },
-        { name: 'Honey', portion: '1 tbsp', p: 0, c: 17, f: 0 },
+        { name: 'Khao Tom (Rice Soup)', portion: '2 cups', p: 12, c: 68, f: 6, alt: 'or Jok' },
+        { name: 'Banana', portion: '1 large', p: 1, c: 30, f: 0, alt: 'or Dates' },
+        { name: 'Sugar / Honey', portion: '1 tbsp', p: 0, c: 17, f: 0, alt: 'or Sugar' },
       ] },
       { name: 'During Run', time: 'Every 45 min', kcal: 120, foods: [
-        { name: 'Energy Gel or Dates', portion: '1 gel / 3 dates', p: 0, c: 25, f: 0 },
-        { name: 'Water / Electrolyte', portion: '250–500ml', p: 0, c: 0, f: 0 },
+        { name: 'Banana or Dates', portion: '1 banana / 3 dates', p: 1, c: 26, f: 0, alt: 'or Energy gel' },
+        { name: 'Water / Sports Drink', portion: '250–500ml', p: 0, c: 0, f: 0, alt: 'or Coconut water' },
       ] },
       { name: 'Recovery Meal', time: 'Within 30 min', kcal: 400, foods: [
-        { name: 'Whey Protein + Milk', portion: '1 scoop + 300ml', p: 30, c: 20, f: 5 },
-        { name: 'Banana or Rice cake', portion: '1 piece', p: 1, c: 27, f: 0 },
+        { name: 'Boiled Eggs + Rice', portion: '2 eggs + 150g rice', p: 30, c: 35, f: 8, alt: 'or Fried eggs' },
+        { name: 'Banana', portion: '1 medium', p: 1, c: 27, f: 0, alt: 'or Mango' },
       ] },
       { name: 'Big Lunch', time: '1:00 PM', kcal: 620, foods: [
-        { name: 'Chicken Breast', portion: '200g', p: 60, c: 0, f: 4 },
-        { name: 'Jasmine Rice', portion: '200g cooked', p: 5, c: 54, f: 0 },
-        { name: 'Mixed Veg', portion: '1.5 cups', p: 4, c: 12, f: 4 },
+        { name: 'Gai Yang (Grilled Chicken)', portion: '200g', p: 60, c: 0, f: 4, alt: 'or Rotisserie chicken' },
+        { name: 'Jasmine Rice', portion: '200g cooked', p: 5, c: 54, f: 0, alt: 'or any white rice' },
+        { name: 'Som Tam (Papaya Salad)', portion: '1.5 cups', p: 4, c: 12, f: 4, alt: 'or mixed green salad' },
       ] },
       { name: 'Dinner', time: '7:00 PM', kcal: 510, foods: [
-        { name: 'Salmon', portion: '180g', p: 42, c: 0, f: 12 },
-        { name: 'Quinoa or Brown Rice', portion: '120g cooked', p: 5, c: 28, f: 2 },
-        { name: 'Vegetables + Olive Oil', portion: '1 cup + 1 tsp', p: 4, c: 10, f: 5 },
+        { name: 'Pla Pad (Stir-fried Fish)', portion: '180g', p: 42, c: 0, f: 12, alt: 'or Grilled/Baked fish' },
+        { name: 'Jasmine Rice', portion: '120g cooked', p: 3, c: 32, f: 0, alt: 'or any white rice' },
+        { name: 'Pad Pak (Stir-fried Vegetables)', portion: '1 cup', p: 4, c: 10, f: 5, alt: 'or Steamed veggies' },
       ] },
     ]
   }
@@ -1523,6 +1529,7 @@ function renderDietMeals() {
           <div>
             <div class="food-name">${f.name}</div>
             <div class="food-portion">${f.portion}</div>
+            ${f.alt ? `<div class="food-alt">${f.alt}</div>` : ''}
           </div>
           <div class="food-macros">
             ${f.p > 0 ? `<span class="macro-chip p-chip">${f.p}g P</span>` : ''}
